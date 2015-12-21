@@ -19,6 +19,7 @@ import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 import java.text.DecimalFormat;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
 public class DynamicGraphActivity extends AppCompatActivity {
     private class MyPlotUpdater implements Observer {
@@ -58,10 +59,10 @@ public class DynamicGraphActivity extends AppCompatActivity {
         dynamicPlot.addSeries(sine1Series,
                 formatter1);
 
-        LineAndPointFormatter formatter2 =
-                new LineAndPointFormatter(Color.rgb(0, 0, 200), null, null, null);
-        formatter2.getLinePaint().setStrokeWidth(10);
-        formatter2.getLinePaint().setStrokeJoin(Paint.Join.ROUND);
+//        LineAndPointFormatter formatter2 =
+//                new LineAndPointFormatter(Color.rgb(0, 0, 200), null, null, null);
+//        formatter2.getLinePaint().setStrokeWidth(10);
+//        formatter2.getLinePaint().setStrokeJoin(Paint.Join.ROUND);
 
         //formatter2.getFillPaint().setAlpha(220);
 //        dynamicPlot.addSeries(sine2Series, formatter2);
@@ -79,7 +80,7 @@ public class DynamicGraphActivity extends AppCompatActivity {
         dynamicPlot.setRangeValueFormat(new DecimalFormat("###.#"));
 
         // uncomment this line to freeze the range boundaries:
-        dynamicPlot.setRangeBoundaries(-100, 100, BoundaryMode.FIXED);
+        dynamicPlot.setRangeBoundaries(0, 100, BoundaryMode.FIXED);
 
         // create a dash effect for domain and range grid lines:
         DashPathEffect dashFx = new DashPathEffect(
@@ -104,25 +105,19 @@ public class DynamicGraphActivity extends AppCompatActivity {
             @Override
             public void notifyObservers() {
                 setChanged();
+                test =5;
                 CommonUtils.printLog("set changed called");
                 super.notifyObservers();
             }
         }
-        private static final double FREQUENCY = 5; // larger is lower frequency
-        private static final int MAX_AMP_SEED = 100;
-        private static final int MIN_AMP_SEED = 10;
-        private static final int AMP_STEP = 1;
-        public static final int SINE1 = 0;
-        public static final int SINE2 = 1;
         private static final int SAMPLE_SIZE = 30;
-        private int phase = 0;
-        private int sinAmp = 1;
+        private int test ;
         private MyObservable notifier;
         private boolean keepRunning = false;
+        Random randomGenerator = new Random();
         {
             notifier = new MyObservable();
         }
-
         public void stopThread() {
             keepRunning = false;
         }
@@ -131,32 +126,19 @@ public class DynamicGraphActivity extends AppCompatActivity {
         public void run() {
             try {
                 keepRunning = true;
-                boolean isRising = true;
-                while (keepRunning) {
-
-                    Thread.sleep(2000); // decrease or remove to speed up the refresh rate.
-                    phase++;
-                    if (sinAmp >= MAX_AMP_SEED) {
-                        isRising = false;
-                    } else if (sinAmp <= MIN_AMP_SEED) {
-                        isRising = true;
-                    }
-                    if (isRising) {
-                        sinAmp += AMP_STEP;
-                    } else {
-                        sinAmp -= AMP_STEP;
-                    }
+                while(keepRunning) {
+                    Thread.sleep(2000);
                     CommonUtils.printLog("observers to be notified");
-//                    notifier.notifyObservers();
+                    notifier.notifyObservers();
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
         }
         public int getItemCount(int series) {
             return SAMPLE_SIZE;
         }
-
         public Number getX(int series, int index) {
             if (index >= SAMPLE_SIZE) {
                 throw new IllegalArgumentException();
@@ -167,26 +149,15 @@ public class DynamicGraphActivity extends AppCompatActivity {
             if (index >= SAMPLE_SIZE) {
                 throw new IllegalArgumentException();
             }
-            double angle = (index + (phase))/FREQUENCY;
-            double amp = sinAmp * Math.sin(angle);
-            switch (series) {
-                case SINE1:
-                    return amp;
-                case SINE2:
-                    return -amp;
-                default:
-                    throw new IllegalArgumentException();
-            }
+            int randomInt = randomGenerator.nextInt(200);
+            return randomInt;
         }
-
         public void addObserver(Observer observer) {
             notifier.addObserver(observer);
         }
-
         public void removeObserver(Observer observer) {
             notifier.deleteObserver(observer);
         }
-
     }
     class SampleDynamicSeries implements XYSeries {
         private SampleDynamicXYDatasource datasource;
@@ -212,15 +183,15 @@ public class DynamicGraphActivity extends AppCompatActivity {
         @Override
         public Number getX(int index) {
             Number number = datasource.getX(seriesIndex, index);
-            CommonUtils.printLog("getX called in SampleDynamicSeries with index: "+ Integer.toString
-                    (index) + "with val: "+ number);
+//            CommonUtils.printLog("getX called in SampleDynamicSeries with index: "+ Integer.toString
+//                    (index) + "with val: "+ number);
             return number;
         }
 
         @Override
         public Number getY(int index) {
             Number num = datasource.getY(seriesIndex, index);
-            CommonUtils.printLog("getY called in SampleDynamicSerieswith index: "+ Integer.toString(index)+ "val returned:  "+ num);
+//            CommonUtils.printLog("getY called in SampleDynamicSerieswith index: "+ Integer.toString(index));
             return num;
         }
     }
