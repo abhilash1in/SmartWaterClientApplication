@@ -32,7 +32,6 @@ public class DynamicGraphActivity extends AppCompatActivity {
 
         @Override
         public void update(Observable o, Object arg) {
-            CommonUtils.printLog("update plot called in updater");
             plot.redraw();
         }
     }
@@ -106,7 +105,6 @@ public class DynamicGraphActivity extends AppCompatActivity {
             public void notifyObservers() {
                 setChanged();
                 test =5;
-                CommonUtils.printLog("set changed called");
                 super.notifyObservers();
             }
         }
@@ -183,8 +181,8 @@ public class DynamicGraphActivity extends AppCompatActivity {
         @Override
         public Number getX(int index) {
             Number number = datasource.getX(seriesIndex, index);
-//            CommonUtils.printLog("getX called in SampleDynamicSeries with index: "+ Integer.toString
-//                    (index) + "with val: "+ number);
+            CommonUtils.printLog("getX called in SampleDynamicSeries with index: "+ Integer.toString
+                    (index) + "with val: "+ number);
             return number;
         }
 
