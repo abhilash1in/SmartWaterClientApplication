@@ -22,10 +22,11 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile "com.androidplot:androidplot-core:0.9.4"
     compile project(':smartcampuslib')
     compile project(':osmdroid-android-4.2')
     compile project(':slf4j-android-1.6.1-RC1')
     compile project(':osmbonuspack_v5.1')
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.androidplot:androidplot-core:0.9.4'
+    compile 'com.android.support:support-v4:23.0.1'
 }

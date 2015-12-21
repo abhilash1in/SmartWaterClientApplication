@@ -147,7 +147,7 @@ public class DynamicGraphActivity extends AppCompatActivity {
             if (index >= SAMPLE_SIZE) {
                 throw new IllegalArgumentException();
             }
-            int randomInt = randomGenerator.nextInt(200);
+            int randomInt = randomGenerator.nextInt(100);
             return randomInt;
         }
         public void addObserver(Observer observer) {
