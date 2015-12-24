@@ -40,7 +40,10 @@ public class Dashboard extends AppCompatActivity {
     }
 
     public void loadDynamicGraph (View view) {
+        // send the topic name here as decided by the UI in the dashboard.
+
         Intent graphIntent = new Intent(this, DynamicGraphActivity.class);
+        graphIntent.putExtra("topicName","solarDataMQTT");
         startActivity(graphIntent);
     }
 

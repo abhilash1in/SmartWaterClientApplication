@@ -1,5 +1,9 @@
 package com.example.shashankshekhar.application3s1.Graph;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
@@ -46,18 +50,62 @@ public class DynamicGraphActivity extends AppCompatActivity implements Constants
     private MyPlotUpdater plotUpdater;
     SampleDynamicXYDatasource data;
     private Thread myThread;
+    private String topicName;
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // started receiving the data. now fill the lists and show the UI
+            // try running the thread here withe update
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dynamic_graph);
+        setupDynamicPlot();
+        topicName = getIntent().getStringExtra("topicName");
+        if (topicName != null) {
+            setupBroadcastReceiver();
+        }
+
+//        ServiceAdapter.subscribeToTopic(getApplicationContext(), SOLAR_DATA_TOPIC_NAME);
+//        CommonUtils.printLog("solar data topic subscribed");
+    }
+    @Override
+    public void onStart() {
+        if(topicName != null) {
+            ServiceAdapter.subscribeToTopic(getApplicationContext(),topicName);
+        }
+        super.onStart();
+    }
+    @Override
+    public void onResume() {
+        // kick off the data generating thread:
+        myThread = new Thread(data);
+        myThread.start();
+        setupBroadcastReceiver();
+        super.onResume();
+    }
+    @Override
+    public void onPause() {
+        data.stopThread();
+        unregisterReceiver(broadcastReceiver);
+        super.onPause();
+    }
+    @Override
+    public void onStop() {
+        ServiceAdapter.unsubscribeFromTopic(getApplicationContext(),topicName);
+        super.onStop();
+    }
+
+
+    private void setupDynamicPlot () {
         dynamicPlot = (XYPlot)findViewById(R.id.dynamicXYPlot);
         plotUpdater = new MyPlotUpdater(dynamicPlot);
         // set up whole numbers in domain
         dynamicPlot.getGraphWidget().setDomainValueFormat(new DecimalFormat("0"));
         data = new SampleDynamicXYDatasource();
-        SampleDynamicSeries sine1Series = new SampleDynamicSeries(data, 0, "Sine 1");
-//        SampleDynamicSeries sine2Series = new SampleDynamicSeries(data, 1, "Sine 2");
-
+        SampleDynamicSeries sine1Series = new SampleDynamicSeries(data, 0, "Plot 1");
         LineAndPointFormatter formatter1 = new LineAndPointFormatter(
                 Color.rgb(0, 0, 0), null, null, null);
         formatter1.getLinePaint().setStrokeJoin(Paint.Join.ROUND);
@@ -85,97 +133,15 @@ public class DynamicGraphActivity extends AppCompatActivity implements Constants
                 new float[] {PixelUtils.dpToPix(3), PixelUtils.dpToPix(3)}, 0);
         dynamicPlot.getGraphWidget().getDomainGridLinePaint().setPathEffect(dashFx);
         dynamicPlot.getGraphWidget().getRangeGridLinePaint().setPathEffect(dashFx);
-        // subscribe to solar data
-        if (ServiceAdapter.isServiceConnected() == false) {
-            CommonUtils.showToast(getApplicationContext(),"Service not connected");
+    }
+    public void setupBroadcastReceiver () {
+        if (topicName == null) {
             return;
         }
-//        ServiceAdapter.subscribeToTopic(getApplicationContext(), SOLAR_DATA_TOPIC_NAME);
-//        CommonUtils.printLog("solar data topic subscribed");
-    }
-    @Override
-    public void onResume() {
-        // kick off the data generating thread:
-        myThread = new Thread(data);
-        myThread.start();
-        super.onResume();
-    }
-    @Override
-    public void onPause() {
-        data.stopThread();
-        super.onPause();
-    }
-    class SampleDynamicXYDatasource implements Runnable,EventReceiverInterface {
-        class MyObservable extends Observable {
-            @Override
-            public void notifyObservers() {
-                setChanged();
-                super.notifyObservers();
-            }
-        }
-        private static final int SAMPLE_SIZE = 30;
-        private int test ;
-        List<Integer> yList = new ArrayList<Integer>(Collections.nCopies(30, 0));
-        List<Integer> xList = new ArrayList<Integer>(Collections.nCopies(30, 0));
-        private MyObservable notifier;
-        private boolean keepRunning = false;
-        Random randomGenerator = new Random();
-        {
-            notifier = new MyObservable();
-        }
-        public void stopThread() {
-            keepRunning = false;
-        }
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(topicName);
+        registerReceiver(broadcastReceiver, intentFilter);
 
-        @Override
-        public void run() {
-            try {
-                keepRunning = true;
-                test = 0;
-                EventReceiverService obj = new EventReceiverService();
-                CommonUtils.printLog("service obj in DGA: " + obj.toString());
-                obj.registerCallback(this);
-                while(keepRunning) {
-                    Thread.sleep(1000);
-                    int randomInt = randomGenerator.nextInt(100);
-                    test++;
-                    yList.remove(0);
-                    yList.add(29, randomInt);
-                    xList.remove(0);
-                    xList.add(29, test);
-                    notifier.notifyObservers();
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }
-        public int getItemCount(int series) {
-            return SAMPLE_SIZE;
-        }
-        public Number getX(int series, int index) {
-            if (index >= SAMPLE_SIZE) {
-                throw new IllegalArgumentException();
-            }
-            return xList.get(index);
-        }
-        public Number getY(int series, int index) {
-            if (index >= SAMPLE_SIZE) {
-                throw new IllegalArgumentException();
-            }
-//            int randomInt = randomGenerator.nextInt(100);
-            return yList.get(index);
-        }
-        public void addObserver(Observer observer) {
-            notifier.addObserver(observer);
-        }
-        public void removeObserver(Observer observer) {
-            notifier.deleteObserver(observer);
-        }
-        @Override
-        public void onReceiveEvent(String eventName, String message) {
-            CommonUtils.printLog("data received where it should be");
-        }
     }
     class SampleDynamicSeries implements XYSeries {
         private SampleDynamicXYDatasource datasource;
@@ -205,7 +171,6 @@ public class DynamicGraphActivity extends AppCompatActivity implements Constants
 //                    (index) + "with val: "+ number);
             return number;
         }
-
         @Override
         public Number getY(int index) {
             Number num = datasource.getY(seriesIndex, index);

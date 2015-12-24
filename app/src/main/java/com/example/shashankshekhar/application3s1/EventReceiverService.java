@@ -32,8 +32,6 @@ public class EventReceiverService extends Service implements Constants{
 
     @Override
     public void onCreate () {
-        CommonUtils.printLog("receiver service created...");
-        CommonUtils.printLog("created service obj: "+this.toString());
         setupBroadcastReceiver();
     }
     public void registerCallback (EventReceiverInterface obj) {
