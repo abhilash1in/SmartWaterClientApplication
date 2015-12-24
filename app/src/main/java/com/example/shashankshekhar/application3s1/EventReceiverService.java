@@ -40,7 +40,6 @@ public class EventReceiverService extends Service implements Constants{
     public void setupBroadcastReceiver () {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WATER_DATA_TOPIC_NAME);
-        intentFilter.addAction(SOLAR_DATA_TOPIC_NAME);
         if (broadcastReceiver == null) {
             CommonUtils.printLog("broadcast receiver is null..returning");
             return;
@@ -75,10 +74,6 @@ public class EventReceiverService extends Service implements Constants{
                 else {
                     createAndSendNotification("Water leakage","water leakage was detected",null,null);
                 }
-            } else if (action.equals(SOLAR_DATA_TOPIC_NAME)) {
-                // CALL the interface
-                CommonUtils.printLog("solar data received in 3s1");
-                receiverInterface.onReceiveEvent(action, message);
             }
 
 

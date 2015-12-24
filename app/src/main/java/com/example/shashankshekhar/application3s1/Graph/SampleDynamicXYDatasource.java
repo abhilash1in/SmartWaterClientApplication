@@ -1,5 +1,7 @@
 package com.example.shashankshekhar.application3s1.Graph;
 
+import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.Random;
 /**
  * Created by shashankshekhar on 24/12/15.
  */
-class SampleDynamicXYDatasource implements Runnable {
+class SampleDynamicXYDatasource {
     class MyObservable extends Observable {
         @Override
         public void notifyObservers() {
@@ -32,26 +34,26 @@ class SampleDynamicXYDatasource implements Runnable {
         keepRunning = false;
     }
 
-    @Override
-    public void run() {
-        try {
-            keepRunning = true;
-            test = 0;
-            while(keepRunning) {
-                Thread.sleep(1000);
-                int randomInt = randomGenerator.nextInt(100);
-                test++;
-                yList.remove(0);
-                yList.add(29, randomInt);
-                xList.remove(0);
-                xList.add(29, test);
-                notifier.notifyObservers();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-    }
+//    @Override
+//    public void run() {
+//        try {
+//            keepRunning = true;
+//            test = 0;
+//            while(keepRunning) {
+//                Thread.sleep(1000);
+//                int randomInt = randomGenerator.nextInt(100);
+//                test++;
+//                yList.remove(0);
+//                yList.add(29, randomInt);
+//                xList.remove(0);
+//                xList.add(29, test);
+//                notifier.notifyObservers();
+//            }
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
     public int getItemCount(int series) {
         return SAMPLE_SIZE;
     }
@@ -73,5 +75,16 @@ class SampleDynamicXYDatasource implements Runnable {
     }
     public void removeObserver(Observer observer) {
         notifier.deleteObserver(observer);
+    }
+    public void updateXY(Integer xVal,Integer yVal) {
+        xList.remove(0);
+        // amake the time in legibl format, everytime a new broadcast is set substact it from the first timestamp
+        // received
+        xList.add(29,xVal);
+        yList.remove(0);
+        yList.add(29, yVal);
+        notifier.notifyObservers();
+        CommonUtils.printLog("xList: " + xList.toString());
+        CommonUtils.printLog("yList: " + yList.toString());
     }
 }

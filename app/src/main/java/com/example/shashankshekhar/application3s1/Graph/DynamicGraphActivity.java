@@ -24,6 +24,9 @@ import com.example.shashankshekhar.smartcampuslib.Constants;
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,11 +54,32 @@ public class DynamicGraphActivity extends AppCompatActivity implements Constants
     SampleDynamicXYDatasource data;
     private Thread myThread;
     private String topicName;
+    boolean resetTimeStamp = true;
+    Integer initalTimeStamp;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             // started receiving the data. now fill the lists and show the UI
             // try running the thread here withe update
+            // extract the time stamp and any other  one val to be shown
+            String messageString = intent.getStringExtra("message");
+            JSONObject jsonObject = null;
+            Integer timeStamp = 0;
+            Integer temperature =0;
+            try {
+                jsonObject = new JSONObject(messageString);
+                timeStamp = jsonObject.getInt("Date and Time");
+                timeStamp/=1000;
+                if (resetTimeStamp == true) {
+                    initalTimeStamp = timeStamp;
+                    resetTimeStamp = false;
+                }
+                temperature = jsonObject.getInt("Temperature");
+            } catch (JSONException e ) {
+                CommonUtils.printLog("could not  convert to json");
+            }
+            CommonUtils.printLog(jsonObject.toString());
+            data.updateXY((timeStamp - initalTimeStamp), temperature);
         }
     };
     @Override
@@ -63,6 +87,7 @@ public class DynamicGraphActivity extends AppCompatActivity implements Constants
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dynamic_graph);
         setupDynamicPlot();
+
         topicName = getIntent().getStringExtra("topicName");
         if (topicName != null) {
             setupBroadcastReceiver();
@@ -74,27 +99,39 @@ public class DynamicGraphActivity extends AppCompatActivity implements Constants
     @Override
     public void onStart() {
         if(topicName != null) {
-            ServiceAdapter.subscribeToTopic(getApplicationContext(),topicName);
+            ServiceAdapter.subscribeToTopic(getApplicationContext(), topicName);
         }
         super.onStart();
     }
     @Override
     public void onResume() {
         // kick off the data generating thread:
-        myThread = new Thread(data);
-        myThread.start();
+//        myThread = new Thread(data);
+//        myThread.start();
         setupBroadcastReceiver();
         super.onResume();
     }
     @Override
     public void onPause() {
-        data.stopThread();
-        unregisterReceiver(broadcastReceiver);
+//        data.stopThread();
+        try {
+            unregisterReceiver(broadcastReceiver);
+        } catch (IllegalArgumentException ex)
+        {
+            // do nothing. already unregistered or not registered at all
+        }
+
         super.onPause();
     }
     @Override
     public void onStop() {
-        ServiceAdapter.unsubscribeFromTopic(getApplicationContext(),topicName);
+        ServiceAdapter.unsubscribeFromTopic(getApplicationContext(), topicName);
+        try {
+            unregisterReceiver(broadcastReceiver);
+        } catch (IllegalArgumentException ex)
+        {
+            // do nothing. already unregistered or not registered at all
+        }
         super.onStop();
     }
 
@@ -138,9 +175,15 @@ public class DynamicGraphActivity extends AppCompatActivity implements Constants
         if (topicName == null) {
             return;
         }
+        resetTimeStamp = true;
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(topicName);
-        registerReceiver(broadcastReceiver, intentFilter);
+        try {
+            registerReceiver(broadcastReceiver, intentFilter);
+        } catch (IllegalArgumentException ex) {
+            // recevier already registered
+        }
+
 
     }
     class SampleDynamicSeries implements XYSeries {

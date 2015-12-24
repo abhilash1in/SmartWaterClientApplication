@@ -16,10 +16,11 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.example.shashankshekhar.application3s1.R;
+import com.example.shashankshekhar.smartcampuslib.Constants;
 
 import java.util.Calendar;
 
-public class Dashboard extends AppCompatActivity {
+public class Dashboard extends AppCompatActivity implements Constants {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class Dashboard extends AppCompatActivity {
         // send the topic name here as decided by the UI in the dashboard.
 
         Intent graphIntent = new Intent(this, DynamicGraphActivity.class);
-        graphIntent.putExtra("topicName","solarDataMQTT");
+        graphIntent.putExtra("topicName",SOLAR_DATA_TOPIC_NAME);
         startActivity(graphIntent);
     }
 
