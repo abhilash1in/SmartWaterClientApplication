@@ -59,9 +59,6 @@ public class DynamicGraphActivity extends AppCompatActivity implements Constants
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // started receiving the data. now fill the lists and show the UI
-            // try running the thread here withe update
-            // extract the time stamp and any other  one val to be shown
             String messageString = intent.getStringExtra("message");
             JSONObject jsonObject = null;
             Integer timeStamp = 0;
@@ -92,9 +89,6 @@ public class DynamicGraphActivity extends AppCompatActivity implements Constants
         if (topicName != null) {
             setupBroadcastReceiver();
         }
-
-//        ServiceAdapter.subscribeToTopic(getApplicationContext(), SOLAR_DATA_TOPIC_NAME);
-//        CommonUtils.printLog("solar data topic subscribed");
     }
     @Override
     public void onStart() {
@@ -105,15 +99,11 @@ public class DynamicGraphActivity extends AppCompatActivity implements Constants
     }
     @Override
     public void onResume() {
-        // kick off the data generating thread:
-//        myThread = new Thread(data);
-//        myThread.start();
         setupBroadcastReceiver();
         super.onResume();
     }
     @Override
     public void onPause() {
-//        data.stopThread();
         try {
             unregisterReceiver(broadcastReceiver);
         } catch (IllegalArgumentException ex)
