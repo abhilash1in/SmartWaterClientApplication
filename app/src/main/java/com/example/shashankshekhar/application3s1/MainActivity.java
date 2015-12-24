@@ -55,14 +55,14 @@ public class MainActivity extends AppCompatActivity implements Constants {
             CommonUtils.showToast(getApplicationContext(),"Service not connected");
             return;
         }
-        ServiceAdapter.subscribeToTopic(getApplicationContext(), TOPIC_NAME);
+        ServiceAdapter.subscribeToTopic(getApplicationContext(), WATER_DATA_TOPIC_NAME);
     }
     public void unsubscribeToTopic (View view ) {
         if (ServiceAdapter.isServiceConnected() == false) {
             CommonUtils.showToast(getApplicationContext(),"Service not connected");
             return;
         }
-        ServiceAdapter.unsubscribeFromTopic(getApplicationContext(), TOPIC_NAME);
+        ServiceAdapter.unsubscribeFromTopic(getApplicationContext(), WATER_DATA_TOPIC_NAME);
     }
 
     public void loadMap (View view) {

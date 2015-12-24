@@ -10,7 +10,8 @@ public interface Constants {
 //
 //    }
     String MY_TAG = "S-WATER";
-    String TOPIC_NAME = "iisc/smartx/mobile/water/data";
+    String WATER_DATA_TOPIC_NAME = "iisc/smartx/mobile/water/data";
+    String SOLAR_DATA_TOPIC_NAME = "solarDataMQTT";
     String EVENT_NAME = "WATER_LEAKAGE";
 
 }

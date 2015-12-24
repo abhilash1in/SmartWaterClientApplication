@@ -18,6 +18,7 @@ import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 
 import com.example.shashankshekhar.smartcampuslib.Constants;
 public class EventReceiverService extends Service implements Constants{
+    EventReceiverInterface receiverInterface;
 
     public EventReceiverService() {
     }
@@ -31,13 +32,17 @@ public class EventReceiverService extends Service implements Constants{
 
     @Override
     public void onCreate () {
-        CommonUtils.printLog("receiver service created");
+        CommonUtils.printLog("receiver service created...");
+        CommonUtils.printLog("created service obj: "+this.toString());
         setupBroadcastReceiver();
     }
-
+    public void registerCallback (EventReceiverInterface obj) {
+        this.receiverInterface = obj;
+    }
     public void setupBroadcastReceiver () {
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(TOPIC_NAME);
+        intentFilter.addAction(WATER_DATA_TOPIC_NAME);
+        intentFilter.addAction(SOLAR_DATA_TOPIC_NAME);
         if (broadcastReceiver == null) {
             CommonUtils.printLog("broadcast receiver is null..returning");
             return;
@@ -55,19 +60,29 @@ public class EventReceiverService extends Service implements Constants{
         @Override
         public void onReceive(Context context, Intent intent) {
             /*
-            show the notification here
+            show the notification here. EDIT: showing the notification should not be done here
              */
-            CommonUtils.printLog("broadcast received in client");
+            String action =intent.getAction();
             String message = intent.getStringExtra("message");
-            String msg_content[]=message.toString().split("-");
-            if (msg_content.length == 3) {
-                String lat  = msg_content[1];
-                String long1 = msg_content[2];
-                createAndSendNotification("Water leakage","water leakage was detected",lat,long1);
+            if (action.equals(WATER_DATA_TOPIC_NAME))
+            {
+                CommonUtils.printLog("broadcast received in client");
+
+                String msg_content[]=message.toString().split("-");
+                if (msg_content.length == 3) {
+                    String lat  = msg_content[1];
+                    String long1 = msg_content[2];
+                    createAndSendNotification("Water leakage","water leakage was detected",lat,long1);
+                }
+                else {
+                    createAndSendNotification("Water leakage","water leakage was detected",null,null);
+                }
+            } else if (action.equals(SOLAR_DATA_TOPIC_NAME)) {
+                // CALL the interface
+                CommonUtils.printLog("solar data received in 3s1");
+                receiverInterface.onReceiveEvent(action, message);
             }
-            else {
-                createAndSendNotification("Water leakage","water leakage was detected",null,null);
-            }
+
 
         }
 

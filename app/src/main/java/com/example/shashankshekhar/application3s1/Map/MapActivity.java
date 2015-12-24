@@ -3,7 +3,6 @@ package com.example.shashankshekhar.application3s1.Map;
 import android.app.Activity;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -12,14 +11,7 @@ import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import android.util.Log;
 
-
-import android.view.View;
-import android.widget.Toast;
-
-
-import com.example.shashankshekhar.application3s1.CommonUtilities.LocationHelper;
 import com.example.shashankshekhar.application3s1.ListView.ListViewActivity;
 import com.example.shashankshekhar.application3s1.R;
 import com.example.shashankshekhar.smartcampuslib.Constants;
@@ -72,7 +64,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
          */
 
 //        EventsReceiver eventsReceiver = new EventsReceiver();
-//        IntentFilter intentFilter = new IntentFilter(TOPIC_NAME);
+//        IntentFilter intentFilter = new IntentFilter(WATER_DATA_TOPIC_NAME);
 //        registerReceiver(eventsReceiver,intentFilter);
 //        registerForContextMenu(mapView);
 
@@ -194,7 +186,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_EVENT_NAME && data !=null) {
             // TODO Extract the data returned from the child Activity.
             String eventName = data.getStringExtra("eventName");
-            ServiceAdapter.publishGlobal(getApplicationContext(),TOPIC_NAME, eventName, latitude + "-" + longitude);
+            ServiceAdapter.publishGlobal(getApplicationContext(), WATER_DATA_TOPIC_NAME, eventName, latitude + "-" + longitude);
         }
     }
 }

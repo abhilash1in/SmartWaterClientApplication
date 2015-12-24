@@ -13,8 +13,12 @@ import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 import com.androidplot.xy.XYStepMode;
+import com.example.shashankshekhar.application3s1.EventReceiverInterface;
+import com.example.shashankshekhar.application3s1.EventReceiverService;
 import com.example.shashankshekhar.application3s1.R;
+import com.example.shashankshekhar.smartcampuslib.Constants;
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
+import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -24,7 +28,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
 
-public class DynamicGraphActivity extends AppCompatActivity {
+public class DynamicGraphActivity extends AppCompatActivity implements Constants {
     private class MyPlotUpdater implements Observer {
         Plot plot;
 
@@ -61,14 +65,6 @@ public class DynamicGraphActivity extends AppCompatActivity {
         dynamicPlot.addSeries(sine1Series,
                 formatter1);
 
-//        LineAndPointFormatter formatter2 =
-//                new LineAndPointFormatter(Color.rgb(0, 0, 200), null, null, null);
-//        formatter2.getLinePaint().setStrokeWidth(10);
-//        formatter2.getLinePaint().setStrokeJoin(Paint.Join.ROUND);
-
-        //formatter2.getFillPaint().setAlpha(220);
-//        dynamicPlot.addSeries(sine2Series, formatter2);
-
         // hook up the plotUpdater to the data model:
         data.addObserver(plotUpdater);
 
@@ -89,6 +85,13 @@ public class DynamicGraphActivity extends AppCompatActivity {
                 new float[] {PixelUtils.dpToPix(3), PixelUtils.dpToPix(3)}, 0);
         dynamicPlot.getGraphWidget().getDomainGridLinePaint().setPathEffect(dashFx);
         dynamicPlot.getGraphWidget().getRangeGridLinePaint().setPathEffect(dashFx);
+        // subscribe to solar data
+        if (ServiceAdapter.isServiceConnected() == false) {
+            CommonUtils.showToast(getApplicationContext(),"Service not connected");
+            return;
+        }
+//        ServiceAdapter.subscribeToTopic(getApplicationContext(), SOLAR_DATA_TOPIC_NAME);
+//        CommonUtils.printLog("solar data topic subscribed");
     }
     @Override
     public void onResume() {
@@ -102,7 +105,7 @@ public class DynamicGraphActivity extends AppCompatActivity {
         data.stopThread();
         super.onPause();
     }
-    class SampleDynamicXYDatasource implements Runnable {
+    class SampleDynamicXYDatasource implements Runnable,EventReceiverInterface {
         class MyObservable extends Observable {
             @Override
             public void notifyObservers() {
@@ -129,6 +132,9 @@ public class DynamicGraphActivity extends AppCompatActivity {
             try {
                 keepRunning = true;
                 test = 0;
+                EventReceiverService obj = new EventReceiverService();
+                CommonUtils.printLog("service obj in DGA: " + obj.toString());
+                obj.registerCallback(this);
                 while(keepRunning) {
                     Thread.sleep(1000);
                     int randomInt = randomGenerator.nextInt(100);
@@ -137,12 +143,6 @@ public class DynamicGraphActivity extends AppCompatActivity {
                     yList.add(29, randomInt);
                     xList.remove(0);
                     xList.add(29, test);
-//                    System.out.print(yList);
-                    CommonUtils.printLog("yList: "+yList.toString());
-                    CommonUtils.printLog("xList: "+ xList.toString());
-                    // generate a random int and push it in the queue shift other elements
-                    // then notify the observer
-                    CommonUtils.printLog("observers to be notified");
                     notifier.notifyObservers();
                 }
             } catch (InterruptedException e) {
@@ -172,6 +172,10 @@ public class DynamicGraphActivity extends AppCompatActivity {
         public void removeObserver(Observer observer) {
             notifier.deleteObserver(observer);
         }
+        @Override
+        public void onReceiveEvent(String eventName, String message) {
+            CommonUtils.printLog("data received where it should be");
+        }
     }
     class SampleDynamicSeries implements XYSeries {
         private SampleDynamicXYDatasource datasource;
@@ -197,8 +201,8 @@ public class DynamicGraphActivity extends AppCompatActivity {
         @Override
         public Number getX(int index) {
             Number number = datasource.getX(seriesIndex, index);
-            CommonUtils.printLog("getX called in SampleDynamicSeries with index: "+ Integer.toString
-                    (index) + "with val: "+ number);
+//            CommonUtils.printLog("getX called in SampleDynamicSeries with index: "+ Integer.toString
+//                    (index) + "with val: "+ number);
             return number;
         }
 
