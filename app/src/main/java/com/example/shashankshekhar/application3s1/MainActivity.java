@@ -51,14 +51,14 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
     }
     public void subscribeToTopic (View view) {
-        if (ServiceAdapter.isServiceConnected() == false) {
+        if (ServiceAdapter.serviceConnected() == false) {
             CommonUtils.showToast(getApplicationContext(),"Service not connected");
             return;
         }
         ServiceAdapter.subscribeToTopic(getApplicationContext(), WATER_DATA_TOPIC_NAME);
     }
     public void unsubscribeToTopic (View view ) {
-        if (ServiceAdapter.isServiceConnected() == false) {
+        if (ServiceAdapter.serviceConnected() == false) {
             CommonUtils.showToast(getApplicationContext(),"Service not connected");
             return;
         }
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
     public void loadMap (View view) {
         // code to load the map goes here
-        if (ServiceAdapter.isServiceConnected() == false) {
+        if (ServiceAdapter.serviceConnected() == false) {
             CommonUtils.printLog("service not connected... returning");
             return;
         }
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     }
     public void openCamera (View view) {
         // code to load camera goes here
-        if (ServiceAdapter.isServiceConnected() == false) {
+        if (ServiceAdapter.serviceConnected() == false) {
         CommonUtils.printLog("service not connected... returning");
         return;
     }
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     }
     public void openGraph (View view) {
         // code to load camera goes here
-//        if (ServiceAdapter.isServiceConnected() == false) {
+//        if (ServiceAdapter.serviceConnected() == false) {
 //            CommonUtils.printLog("service not connected... returning");
 //            return;
 //        }

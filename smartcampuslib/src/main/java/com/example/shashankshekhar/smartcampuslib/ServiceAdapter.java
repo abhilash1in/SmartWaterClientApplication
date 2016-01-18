@@ -20,10 +20,6 @@ import android.os.Messenger;
  */
 
 import android.os.RemoteException;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatCallback;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 
@@ -33,7 +29,7 @@ public class ServiceAdapter implements Constants{
     // TODO: 22/11/15 initialise it in a contructor, so a constrctor reveives tow params, app id and app context
     static Context callerContext = null;
     public static void bindToService (Context context) {
-        if (isServiceConnected() == true) {
+        if (serviceConnected() == true) {
             CommonUtils.showToast(context,"Service already connected");
             return;
         }
@@ -46,19 +42,22 @@ public class ServiceAdapter implements Constants{
     }
 
     public static void unbindFromService(Context context) {
+        if (serviceConnected() == false) {
+            CommonUtils.showToast(context,"Already Disconnected, What are you up to!");
+        }
         context.unbindService(serviceConnection);
         bound = false;
         messenger = null;
     }
 
-    public static Boolean isServiceConnected() {
+    public static Boolean serviceConnected() {
         if (messenger==null || bound == false) {
             return false;
         }
         return true;
     }
     public static void publishGlobal (Context context, String topicName,String eventName,String dataString) {
-        if (isServiceConnected() == false) {
+        if (serviceConnected() == false) {
             CommonUtils.printLog("service not connected with client app ..returning");
             if (context !=null) {
                 CommonUtils.showToast(context, "Service is not connected");
@@ -85,7 +84,7 @@ public class ServiceAdapter implements Constants{
     // TODO: 12/11/15 also instead of the hardcoded numbers like 3,4 make an enum
 
     public static String subscribeToTopic (Context context,String topicName) {
-        if (isServiceConnected() == false) {
+        if (serviceConnected() == false) {
             CommonUtils.printLog("service not connected with client app ..returning");
             CommonUtils.showToast(context, "Service is not connected");
             CommonUtils.printLog(messenger.toString() + "bound val while subscribing : " + Boolean.toString(bound));
@@ -105,7 +104,7 @@ public class ServiceAdapter implements Constants{
         return null;
     }
     public static void unsubscribeFromTopic (Context context,String topicName) {
-        if (isServiceConnected() == false) {
+        if (serviceConnected() == false) {
             CommonUtils.printLog("service not connected with client app ..returning");
             CommonUtils.showToast(context,"Service is not connected");
             return;
