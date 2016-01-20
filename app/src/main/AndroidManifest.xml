@@ -23,7 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Map.MapActivity" >
+        <activity android:name=".Map.MapActivity"
+                  android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".Camera.CameraActivity"
@@ -39,11 +40,14 @@
             android:exported="false" >
         </service>
 
-        <activity android:name=".Graph.StaticGraphActivity" >
+        <activity android:name=".Graph.StaticGraphActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Graph.Dashboard" >
+        <activity android:name=".Graph.Dashboard"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Graph.DynamicGraphActivity" >
+        <activity android:name=".Graph.DynamicGraphActivity"
+                  android:screenOrientation="portrait">
         </activity>
     </application>
 
