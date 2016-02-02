@@ -2,13 +2,15 @@ package com.example.shashankshekhar.application3s1;
 
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.example.shashankshekhar.application3s1.Camera.CameraActivity;
+import static com.example.shashankshekhar.application3s1.CommonUtilities.SmartWaterConstants.*;
 import com.example.shashankshekhar.application3s1.Graph.Dashboard;
 import com.example.shashankshekhar.application3s1.Map.MapActivity;
 import com.example.shashankshekhar.smartcampuslib.Constants;
@@ -17,24 +19,16 @@ import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
 
 public class MainActivity extends AppCompatActivity implements Constants {
 
-    private String received_Message;
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // start the receiver service
-        startService(new Intent(this,EventReceiverService.class));
-
-
-    }
-
-    public void startService (View view) {
-        Log.i(MY_TAG, "application 3 service 1");
-        ComponentName componentName = new ComponentName("com.example.shashankshekhar.servicedemo","com.example.shashankshekhar.servicedemo.FirstService");
-        Intent intent = new Intent();
-        intent.setComponent(componentName);
-        ComponentName componentNam = this.startService(intent);
+        // TODO: 02/02/16 generate the app id here and put in a persistent storage
+        updateSharedPreferences();
+        startService(new Intent(this, EventReceiverService.class));
     }
 
     public void bindService (View view) {
@@ -91,6 +85,19 @@ public class MainActivity extends AppCompatActivity implements Constants {
 //        }
         Intent graphIntent = new Intent(this, Dashboard.class);
         startActivity(graphIntent);
+    }
+    private void updateSharedPreferences () {
+        sharedpreferences = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        CommonUtils.printLog("trying to update shared preference");
+        if (sharedpreferences.contains(PACKAGE_NAME) == false || sharedpreferences.getString(PACKAGE_NAME,"") == "") {
+            String applicationName =getResources().getString(R.string.app_name);
+            String packageName = getApplicationContext().getPackageName();
+            CommonUtils.printLog("application name - 3s1: " + applicationName + " Package name: " + packageName);
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(PACKAGE_NAME,packageName);
+            editor.commit();
+            CommonUtils.printLog("updated!!");
+        }
     }
 
 }

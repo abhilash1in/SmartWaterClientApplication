@@ -25,8 +25,10 @@ import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 
 public class ServiceAdapter implements Constants{
     static Messenger messenger = null;
+    Messenger clientMessanger;
     static boolean bound = false;
     // TODO: 22/11/15 initialise it in a contructor, so a constrctor reveives tow params, app id and app context
+    // make it a class for which instacne can be created
     static Context callerContext = null;
     public static void bindToService (Context context) {
         if (serviceConnected() == true) {
@@ -56,11 +58,24 @@ public class ServiceAdapter implements Constants{
         }
         return true;
     }
+//    public static Boolean mqttConnected() {
+//        if(serviceConnected() == false) {
+//            CommonUtils.printLog("service not connected with client app ..returning");
+//            return false;
+//        }
+//        Message messageToPublish = Message.obtain(null,7);
+//        try {
+//            messenger.send(messageToPublish);
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//            CommonUtils.printLog("remote Exception,Could not send message");
+//        }
+//    }
     public static void publishGlobal (Context context, String topicName,String eventName,String dataString) {
         if (serviceConnected() == false) {
             CommonUtils.printLog("service not connected with client app ..returning");
             if (context !=null) {
-                CommonUtils.showToast(context, "Service is not connected");
+                CommonUtils.showToast(context, "Service or mqtt broker is not connected");
             }
 
             return;

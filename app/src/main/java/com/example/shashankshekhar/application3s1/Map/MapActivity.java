@@ -59,21 +59,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
             addMarkerAtLocation(tappedLocation);
         }
 
-        /*
-        register for the broadcast receiver here
-         */
-
-//        EventsReceiver eventsReceiver = new EventsReceiver();
-//        IntentFilter intentFilter = new IntentFilter(WATER_DATA_TOPIC_NAME);
-//        registerReceiver(eventsReceiver,intentFilter);
-//        registerForContextMenu(mapView);
-
-
-//        GeoPoint iisc = new GeoPoint(13.03, 77.561514);
-//        myMapController.setCenter(iisc);
-//        GeoPoint initialMarker = new GeoPoint(13.021575, 77.567017);
-
-
     }
     private void setupMapView () {
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this, this);
@@ -93,30 +78,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         GeoPoint iisc = new GeoPoint(13.03, 77.561514);
         myMapController.setCenter(iisc);
 
-//        try {
-//            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_UPDATE_FREQ_FOREGROUND, LOCATION_UPDATE_DIST, this);
-//            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-////            LocationHelper locationHelper = new LocationHelper(getApplicationContext());
-////            location = locationHelper.getLastKnownLocation();
-//            if (location != null) {
-//                currentLocation = new GeoPoint(location.getLatitude(), location.getLongitude());
-//                myMapController.setCenter(currentLocation);
-//                Log.i(MY_TAG, "lat =  " + Double.toString(location.getLatitude()) + " long = " + Double.toString(location.getLongitude()));
-//            } else {
-//                Log.i(MY_TAG, "location is null");
-//                GeoPoint iisc = new GeoPoint(13.03, 77.561514);
-//                myMapController.setCenter(iisc);
-//            }
-//        } catch (SecurityException e) {
-//            e.printStackTrace();
-//            Toast toast = Toast.makeText(this, "please provide location access", Toast.LENGTH_SHORT);
-//            toast.show();
-//
-//        } catch (IllegalArgumentException e) {
-//            Log.i(MY_TAG, "illegal argument exception");
-//        } catch (RuntimeException ex) {
-//            Log.i(MY_TAG, "runtime exception");
-//        }
     }
 
     @Override
