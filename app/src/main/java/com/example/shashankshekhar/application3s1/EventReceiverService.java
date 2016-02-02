@@ -33,6 +33,7 @@ public class EventReceiverService extends Service implements Constants{
     @Override
     public void onCreate () {
         setupBroadcastReceiver();
+        // TODO: 02/02/16 create a service adapter instance here and init it with app context
     }
     public void registerCallback (EventReceiverInterface obj) {
         this.receiverInterface = obj;

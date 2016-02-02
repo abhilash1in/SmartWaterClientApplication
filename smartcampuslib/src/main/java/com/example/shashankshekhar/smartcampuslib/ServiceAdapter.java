@@ -30,6 +30,9 @@ public class ServiceAdapter implements Constants{
     // TODO: 22/11/15 initialise it in a contructor, so a constrctor reveives tow params, app id and app context
     // make it a class for which instacne can be created
     static Context callerContext = null;
+    ServiceAdapter (Context callerContext,String appId,) {
+
+    }
     public static void bindToService (Context context) {
         if (serviceConnected() == true) {
             CommonUtils.showToast(context,"Service already connected");
