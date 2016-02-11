@@ -17,10 +17,7 @@ import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 import com.androidplot.xy.XYStepMode;
-import com.example.shashankshekhar.application3s1.EventReceiverInterface;
-import com.example.shashankshekhar.application3s1.EventReceiverService;
 import com.example.shashankshekhar.application3s1.R;
-import com.example.shashankshekhar.smartcampuslib.Constants;
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
 
@@ -28,14 +25,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Random;
 
-public class DynamicGraphActivity extends AppCompatActivity implements Constants {
+public class DynamicGraphActivity extends AppCompatActivity  {
     private class MyPlotUpdater implements Observer {
         Plot plot;
 

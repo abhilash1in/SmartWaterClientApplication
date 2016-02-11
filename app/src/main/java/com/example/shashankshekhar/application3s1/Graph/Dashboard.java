@@ -16,11 +16,11 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.example.shashankshekhar.application3s1.R;
-import com.example.shashankshekhar.smartcampuslib.Constants;
+import static com.example.shashankshekhar.smartcampuslib.SmartXLibConstants.*;
 
 import java.util.Calendar;
 
-public class Dashboard extends AppCompatActivity implements Constants {
+public class Dashboard extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

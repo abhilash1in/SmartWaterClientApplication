@@ -1,7 +1,6 @@
 package com.example.shashankshekhar.application3s1;
 
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,11 +12,11 @@ import com.example.shashankshekhar.application3s1.Camera.CameraActivity;
 import static com.example.shashankshekhar.application3s1.CommonUtilities.SmartWaterConstants.*;
 import com.example.shashankshekhar.application3s1.Graph.Dashboard;
 import com.example.shashankshekhar.application3s1.Map.MapActivity;
-import com.example.shashankshekhar.smartcampuslib.Constants;
+import static com.example.shashankshekhar.smartcampuslib.SmartXLibConstants.*;
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
 
-public class MainActivity extends AppCompatActivity implements Constants {
+public class MainActivity extends AppCompatActivity {
 
     SharedPreferences sharedpreferences;
 

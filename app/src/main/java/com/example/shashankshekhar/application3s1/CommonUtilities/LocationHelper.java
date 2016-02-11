@@ -1,21 +1,18 @@
 package com.example.shashankshekhar.application3s1.CommonUtilities;
 
 import android.content.Context;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.shashankshekhar.smartcampuslib.Constants;
+import static com.example.shashankshekhar.smartcampuslib.SmartXLibConstants.*;
 
 import java.util.List;
 
 /**
  * Created by shashankshekhar on 03/11/15.
  */
-public class LocationHelper implements Constants {
+public class LocationHelper  {
     LocationManager mLocationManager;
     private Context applicationCntxt;
 //    Location myLocation = getLastKnownLocation();

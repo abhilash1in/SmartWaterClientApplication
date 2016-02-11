@@ -6,21 +6,19 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.shashankshekhar.smartcampuslib.Constants;
+import static com.example.shashankshekhar.smartcampuslib.SmartXLibConstants.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.security.cert.TrustAnchor;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * Created by shashankshekhar on 03/11/15.
  */
-public class CommonUtils implements Constants {
+public class CommonUtils {
     private static final String SMART_CAMPUS_FOLDER_NAME = "SmartCampus";
     private static final String SMART_CAMPUS_LOG_FILE_NAME = "SmartCampusLog.txt";
 

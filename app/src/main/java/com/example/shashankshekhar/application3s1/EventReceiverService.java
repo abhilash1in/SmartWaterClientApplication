@@ -16,8 +16,8 @@ import android.support.v7.app.NotificationCompat;
 import com.example.shashankshekhar.application3s1.Map.MapActivity;
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 
-import com.example.shashankshekhar.smartcampuslib.Constants;
-public class EventReceiverService extends Service implements Constants{
+import static com.example.shashankshekhar.smartcampuslib.SmartXLibConstants.*;
+public class EventReceiverService extends Service {
     EventReceiverInterface receiverInterface;
 
     public EventReceiverService() {

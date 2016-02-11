@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
-
+import static com.example.shashankshekhar.smartcampuslib.SmartXLibConstants.*;
 /**
  * Created by shashankshekhar on 27/10/15.
  * the goal is to make this as a singleton class. each application inits it with its unique
@@ -23,16 +23,20 @@ import android.os.RemoteException;
 
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 
-public class ServiceAdapter implements Constants{
+public class ServiceAdapter {
     static Messenger messenger = null;
     Messenger clientMessanger;
     static boolean bound = false;
-    // TODO: 22/11/15 initialise it in a contructor, so a constrctor reveives tow params, app id and app context
+    // TODO: 22/11/15 initialise it in a contructor, so a constrctor reveives two params, app id and app context
     // make it a class for which instacne can be created
+    /*
+    the problem is
+     */
     static Context callerContext = null;
-    ServiceAdapter (Context callerContext,String appId,) {
+    public ServiceAdapter (Context callerContext,String appId) {
 
     }
+
     public static void bindToService (Context context) {
         if (serviceConnected() == true) {
             CommonUtils.showToast(context,"Service already connected");
@@ -83,7 +87,7 @@ public class ServiceAdapter implements Constants{
 
             return;
         }
-        Message messageToPublish = Message.obtain(null,3);
+        Message messageToPublish = Message.obtain(null,PUBLISH_MESSAGE);
         Bundle bundleToPublish = new Bundle();
         bundleToPublish.putString("topicName",topicName);
         bundleToPublish.putString("eventName", eventName);
@@ -98,10 +102,8 @@ public class ServiceAdapter implements Constants{
 
     }
 
-    // TODO: 12/11/15 this should return a subscribe id to the caller
-    // TODO: 12/11/15 also instead of the hardcoded numbers like 3,4 make an enum
-
     public static String subscribeToTopic (Context context,String topicName) {
+        // TODO: 12/11/15 this should return a subscribe id to the caller
         if (serviceConnected() == false) {
             CommonUtils.printLog("service not connected with client app ..returning");
             CommonUtils.showToast(context, "Service is not connected");
@@ -109,7 +111,7 @@ public class ServiceAdapter implements Constants{
             return null;
         }
         CommonUtils.printLog("call to subscribe made from application");
-        Message messageToSubscribe = Message.obtain(null,4);
+        Message messageToSubscribe = Message.obtain(null,SUBSCRIBE_TO_TOPIC);
         Bundle bundle = new Bundle();
         bundle.putString("topicName", topicName);
         messageToSubscribe.setData(bundle);
@@ -128,7 +130,7 @@ public class ServiceAdapter implements Constants{
             return;
         }
 // TODO: 20/11/15 the enums should be in the library which we will be publishing
-        Message unsubscribe = Message.obtain(null,5);
+        Message unsubscribe = Message.obtain(null,UNSUBSCRIBE_TO_TOPIC);
         Bundle bundle = new Bundle();
         bundle.putString("topicName", topicName);
         unsubscribe.setData(bundle);

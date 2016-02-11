@@ -14,7 +14,7 @@ import android.os.Bundle;
 
 import com.example.shashankshekhar.application3s1.ListView.ListViewActivity;
 import com.example.shashankshekhar.application3s1.R;
-import com.example.shashankshekhar.smartcampuslib.Constants;
+import static com.example.shashankshekhar.smartcampuslib.SmartXLibConstants.*;
 
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
@@ -29,7 +29,7 @@ import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 
 
-public class MapActivity extends AppCompatActivity implements LocationListener, MapEventsReceiver,Constants {
+public class MapActivity extends AppCompatActivity implements LocationListener, MapEventsReceiver {
     MapView mapView;
     MapController myMapController;
     LocationManager locationManager;
