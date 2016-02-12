@@ -5,86 +5,59 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import static com.example.shashankshekhar.smartcampuslib.SmartXLibConstants.*;
-/**
- * Created by shashankshekhar on 27/10/15.
- * the goal is to make this as a singleton class. each application inits it with its unique
- * application id. this class will have one instance per application running. Apart from the
- * application id set anyting else required in the constructor.
- *
- * For the other classes of the library we need to see if it suits a singleton usecase.
- * each app initialises the library with its singleton class
- */
-
 import android.os.RemoteException;
-
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 
 public class ServiceAdapter {
     static Messenger messenger = null;
-    Messenger clientMessanger;
+    Messenger receiverMessenger;
     static boolean bound = false;
     // TODO: 22/11/15 initialise it in a contructor, so a constrctor reveives two params, app id and app context
     // make it a class for which instacne can be created
-    /*
-    the problem is
-     */
-    static Context callerContext = null;
-    public ServiceAdapter (Context callerContext,String appId) {
-
+    Context callerContext = null;
+    String applicationId = null;
+    public ServiceAdapter (Context context,String appId) {
+        callerContext = context;
+        applicationId = appId;
     }
 
-    public static void bindToService (Context context) {
+    public void bindToService () {
         if (serviceConnected() == true) {
-            CommonUtils.showToast(context,"Service already connected");
+            CommonUtils.showToast(callerContext, "Service already connected");
             return;
         }
         ComponentName componentName = new ComponentName("com.example.shashankshekhar.servicedemo",
                 "com.example.shashankshekhar.servicedemo.FirstService");
         Intent intent = new Intent();
         intent.setComponent(componentName);
-         Boolean isConnected =context.bindService(intent, serviceConnection, Context.BIND_IMPORTANT);
-        callerContext = context;
+        Boolean isConnected = callerContext.bindService(intent, serviceConnection, Context.BIND_IMPORTANT);
+        receiverMessenger = new Messenger(new IncomingHandler(callerContext));
+
     }
 
-    public static void unbindFromService(Context context) {
+    public void unbindFromService() {
         if (serviceConnected() == false) {
-            CommonUtils.showToast(context,"Already Disconnected, What are you up to!");
+            CommonUtils.showToast(callerContext,"Already Disconnected");
         }
-        context.unbindService(serviceConnection);
+        callerContext.unbindService(serviceConnection);
         bound = false;
         messenger = null;
     }
 
-    public static Boolean serviceConnected() {
+    public Boolean serviceConnected() {
         if (messenger==null || bound == false) {
             return false;
         }
         return true;
     }
-//    public static Boolean mqttConnected() {
-//        if(serviceConnected() == false) {
-//            CommonUtils.printLog("service not connected with client app ..returning");
-//            return false;
-//        }
-//        Message messageToPublish = Message.obtain(null,7);
-//        try {
-//            messenger.send(messageToPublish);
-//        } catch (RemoteException e) {
-//            e.printStackTrace();
-//            CommonUtils.printLog("remote Exception,Could not send message");
-//        }
-//    }
-    public static void publishGlobal (Context context, String topicName,String eventName,String dataString) {
-        if (serviceConnected() == false) {
-            CommonUtils.printLog("service not connected with client app ..returning");
-            if (context !=null) {
-                CommonUtils.showToast(context, "Service or mqtt broker is not connected");
-            }
 
+    public void publishGlobal (String topicName,String eventName,String dataString) {
+        if (checkConnectivity() == false) {
             return;
         }
         Message messageToPublish = Message.obtain(null,PUBLISH_MESSAGE);
@@ -93,6 +66,7 @@ public class ServiceAdapter {
         bundleToPublish.putString("eventName", eventName);
         bundleToPublish.putString("dataString", dataString);
         messageToPublish.setData(bundleToPublish);
+        messageToPublish.replyTo = receiverMessenger;
         try {
             messenger.send(messageToPublish);
         } catch (RemoteException e) {
@@ -102,12 +76,9 @@ public class ServiceAdapter {
 
     }
 
-    public static String subscribeToTopic (Context context,String topicName) {
-        // TODO: 12/11/15 this should return a subscribe id to the caller
-        if (serviceConnected() == false) {
-            CommonUtils.printLog("service not connected with client app ..returning");
-            CommonUtils.showToast(context, "Service is not connected");
-            CommonUtils.printLog(messenger.toString() + "bound val while subscribing : " + Boolean.toString(bound));
+    public String subscribeToTopic (String topicName) {
+        // TODO: 12/11/15 this should return a subscribe id to the caller hence the String return type
+        if (checkConnectivity() == false) {
             return null;
         }
         CommonUtils.printLog("call to subscribe made from application");
@@ -115,6 +86,7 @@ public class ServiceAdapter {
         Bundle bundle = new Bundle();
         bundle.putString("topicName", topicName);
         messageToSubscribe.setData(bundle);
+        messageToSubscribe.replyTo = receiverMessenger;
         try {
             messenger.send(messageToSubscribe);
         }  catch (RemoteException e) {
@@ -123,17 +95,15 @@ public class ServiceAdapter {
         }
         return null;
     }
-    public static void unsubscribeFromTopic (Context context,String topicName) {
-        if (serviceConnected() == false) {
-            CommonUtils.printLog("service not connected with client app ..returning");
-            CommonUtils.showToast(context,"Service is not connected");
+    public void unsubscribeFromTopic (String topicName) {
+        if (checkConnectivity() == false) {
             return;
         }
-// TODO: 20/11/15 the enums should be in the library which we will be publishing
         Message unsubscribe = Message.obtain(null,UNSUBSCRIBE_TO_TOPIC);
         Bundle bundle = new Bundle();
         bundle.putString("topicName", topicName);
         unsubscribe.setData(bundle);
+        unsubscribe.replyTo= receiverMessenger;
         try {
             messenger.send(unsubscribe);
         }  catch (RemoteException e) {
@@ -141,8 +111,24 @@ public class ServiceAdapter {
             CommonUtils.printLog("exception while sending message for unsubscribe");
         }
     }
-
-    private static ServiceConnection serviceConnection = new ServiceConnection() {
+    private Boolean checkConnectivity() {
+        if (serviceConnected() == false) {
+            CommonUtils.printLog("service not connected with client app ..returning");
+            if (callerContext != null) {
+                CommonUtils.showToast(callerContext,"Service is not connected");
+            }
+            return false;
+        }
+        if (CommonUtils.isNetworkAvailable(callerContext) == false) {
+            CommonUtils.printLog("network not available..returning");
+            if (callerContext != null) {
+                CommonUtils.showToast(callerContext,"No Network");
+            }
+            return false;
+        }
+        return true;
+    }
+    private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             messenger = new Messenger(service);
@@ -160,3 +146,39 @@ public class ServiceAdapter {
         }
     };
 }
+
+class IncomingHandler extends Handler {
+    static final int MQTT_CONNECTED =1;
+    static final int UNABLE_TO_CONNECT =2;
+    static final int MQTT_ALREADY_CONNECTED =3;
+    static final int NO_NETWORK_AVAILABLE =4;
+    static final int MQTT_CONNECTING = 5; // implement this
+
+    Context applicationContext;
+    IncomingHandler(Context context) {
+        this.applicationContext = context;
+    }
+    @Override
+    public void handleMessage (Message message) {
+        switch (message.what) {
+            case MQTT_CONNECTED://
+                CommonUtils.printLog("mqtt connected");
+                CommonUtils.showToast(applicationContext, "Connected!!");
+                break;
+            case UNABLE_TO_CONNECT:
+                CommonUtils.printLog("unable to connect");
+                CommonUtils.showToast(applicationContext,"could not connect");
+                break;
+            case MQTT_ALREADY_CONNECTED:
+                CommonUtils.showToast(applicationContext, "Already Connected");
+                break;
+            case NO_NETWORK_AVAILABLE:
+                CommonUtils.showToast(applicationContext,"No Network!!");
+                break;
+            default:
+
+        }
+
+    }
+}
+

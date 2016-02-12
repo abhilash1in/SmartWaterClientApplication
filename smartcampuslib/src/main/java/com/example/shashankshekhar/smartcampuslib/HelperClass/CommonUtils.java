@@ -1,6 +1,8 @@
 package com.example.shashankshekhar.smartcampuslib.HelperClass;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.Looper;
 import android.util.Log;
@@ -76,6 +78,12 @@ public class CommonUtils {
             return true;
         }
         return false;
+    }
+    public static boolean isNetworkAvailable(Context appContext) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) appContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 }
