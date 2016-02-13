@@ -150,9 +150,9 @@ public class ServiceAdapter {
 class IncomingHandler extends Handler {
     static final int MQTT_CONNECTED =1;
     static final int UNABLE_TO_CONNECT =2;
-    static final int MQTT_ALREADY_CONNECTED =3;
     static final int NO_NETWORK_AVAILABLE =4;
-    static final int MQTT_CONNECTING = 5; // implement this
+    static final int MQTT_CONNECTION_IN_PROGRESS = 5;
+    static final int MQTT_NOT_CONNECTED = 6;
 
     Context applicationContext;
     IncomingHandler(Context context) {
@@ -169,11 +169,11 @@ class IncomingHandler extends Handler {
                 CommonUtils.printLog("unable to connect");
                 CommonUtils.showToast(applicationContext,"could not connect");
                 break;
-            case MQTT_ALREADY_CONNECTED:
-                CommonUtils.showToast(applicationContext, "Already Connected");
-                break;
             case NO_NETWORK_AVAILABLE:
                 CommonUtils.showToast(applicationContext,"No Network!!");
+                break;
+            case MQTT_CONNECTION_IN_PROGRESS:
+                CommonUtils.showToast(applicationContext,"Connection in progress!!");
                 break;
             default:
 
