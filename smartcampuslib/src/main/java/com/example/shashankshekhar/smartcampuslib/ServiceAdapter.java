@@ -15,15 +15,21 @@ import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 
 public class ServiceAdapter {
     static Messenger messenger = null;
+    static ServiceAdapter serviceAdapterinstance ;
     Messenger receiverMessenger;
     static boolean bound = false;
-    // TODO: 22/11/15 initialise it in a contructor, so a constrctor reveives two params, app id and app context
-    // make it a class for which instacne can be created
+    // TODO: 22/11/15 initialise it in a contructor, so a constrctor reveives two params and app context
     Context callerContext = null;
-    String applicationId = null;
-    public ServiceAdapter (Context context,String appId) {
+    String applicationId = null; // initialise it separately and send a call to BGS to update its storage
+    private ServiceAdapter (Context context) {
         callerContext = context;
-        applicationId = appId;
+    }
+    public static ServiceAdapter getServiceAdapterinstance (Context context) {
+        if (serviceAdapterinstance != null) {
+            return serviceAdapterinstance;
+        }
+        serviceAdapterinstance = new ServiceAdapter(context);
+        return serviceAdapterinstance;
     }
 
     public void bindToService () {
@@ -174,6 +180,9 @@ class IncomingHandler extends Handler {
                 break;
             case MQTT_CONNECTION_IN_PROGRESS:
                 CommonUtils.showToast(applicationContext,"Connection in progress!!");
+                break;
+            case MQTT_NOT_CONNECTED:
+                CommonUtils.showToast(applicationContext,"Mqtt is not connected");
                 break;
             default:
 

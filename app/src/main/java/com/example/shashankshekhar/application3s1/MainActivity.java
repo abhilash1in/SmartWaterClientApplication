@@ -19,7 +19,7 @@ import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
 public class MainActivity extends AppCompatActivity {
 
     SharedPreferences sharedpreferences;
-
+    ServiceAdapter serviceAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,16 +27,17 @@ public class MainActivity extends AppCompatActivity {
         // start the receiver service
         // TODO: 02/02/16 generate the app id here and put in a persistent storage
         updateSharedPreferences();
+        serviceAdapter = ServiceAdapter.getServiceAdapterinstance(getApplicationContext());
         startService(new Intent(this, EventReceiverService.class));
     }
 
     public void bindService (View view) {
-        ServiceAdapter.bindToService(getApplicationContext());
+        serviceAdapter.bindToService();
 
     }
 
     public void unbindService (View view) {
-        ServiceAdapter.unbindFromService(getApplicationContext());
+        serviceAdapter.unbindFromService();
     }
     @Override
     protected void onDestroy() {
@@ -44,23 +45,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void subscribeToTopic (View view) {
-        if (ServiceAdapter.serviceConnected() == false) {
+        if (serviceAdapter.serviceConnected() == false) {
             CommonUtils.showToast(getApplicationContext(),"Service not connected");
             return;
         }
-        ServiceAdapter.subscribeToTopic(getApplicationContext(), WATER_DATA_TOPIC_NAME);
+        serviceAdapter.subscribeToTopic(WATER_DATA_TOPIC_NAME);
     }
     public void unsubscribeToTopic (View view ) {
-        if (ServiceAdapter.serviceConnected() == false) {
+        if (serviceAdapter.serviceConnected() == false) {
             CommonUtils.showToast(getApplicationContext(),"Service not connected");
             return;
         }
-        ServiceAdapter.unsubscribeFromTopic(getApplicationContext(), WATER_DATA_TOPIC_NAME);
+        serviceAdapter.unsubscribeFromTopic( WATER_DATA_TOPIC_NAME);
     }
 
     public void loadMap (View view) {
         // code to load the map goes here
-        if (ServiceAdapter.serviceConnected() == false) {
+        if (serviceAdapter.serviceConnected() == false) {
             CommonUtils.printLog("service not connected... returning");
             return;
         }
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void openCamera (View view) {
         // code to load camera goes here
-        if (ServiceAdapter.serviceConnected() == false) {
+        if (serviceAdapter.serviceConnected() == false) {
         CommonUtils.printLog("service not connected... returning");
         return;
     }
@@ -89,13 +90,10 @@ public class MainActivity extends AppCompatActivity {
         sharedpreferences = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         CommonUtils.printLog("trying to update shared preference");
         if (sharedpreferences.contains(PACKAGE_NAME) == false || sharedpreferences.getString(PACKAGE_NAME,"") == "") {
-            String applicationName =getResources().getString(R.string.app_name);
             String packageName = getApplicationContext().getPackageName();
-            CommonUtils.printLog("application name - 3s1: " + applicationName + " Package name: " + packageName);
             SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString(PACKAGE_NAME,packageName);
+            editor.putString(PACKAGE_NAME, packageName);
             editor.commit();
-            CommonUtils.printLog("updated!!");
         }
     }
 

@@ -29,19 +29,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class DynamicGraphActivity extends AppCompatActivity  {
-    private class MyPlotUpdater implements Observer {
-        Plot plot;
-
-        public MyPlotUpdater(Plot plot) {
-            this.plot = plot;
-
-        }
-
-        @Override
-        public void update(Observable o, Object arg) {
-            plot.redraw();
-        }
-    }
     private XYPlot dynamicPlot;
     private MyPlotUpdater plotUpdater;
     SampleDynamicXYDatasource data;
@@ -49,6 +36,17 @@ public class DynamicGraphActivity extends AppCompatActivity  {
     private String topicName;
     boolean resetTimeStamp = true;
     Integer initalTimeStamp;
+    ServiceAdapter serviceAdapter;private class MyPlotUpdater implements Observer {
+        Plot plot;
+        public MyPlotUpdater(Plot plot) {
+            this.plot = plot;
+
+        }
+        @Override
+        public void update(Observable o, Object arg) {
+            plot.redraw();
+        }
+    }
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -76,6 +74,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dynamic_graph);
+        serviceAdapter = ServiceAdapter.getServiceAdapterinstance(getApplicationContext());
         setupDynamicPlot();
 
         topicName = getIntent().getStringExtra("topicName");
@@ -86,7 +85,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
     @Override
     public void onStart() {
         if(topicName != null) {
-            ServiceAdapter.subscribeToTopic(getApplicationContext(), topicName);
+            serviceAdapter.subscribeToTopic(topicName);
         }
         super.onStart();
     }
@@ -108,7 +107,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
     }
     @Override
     public void onStop() {
-        ServiceAdapter.unsubscribeFromTopic(getApplicationContext(), topicName);
+        serviceAdapter.unsubscribeFromTopic(topicName);
         try {
             unregisterReceiver(broadcastReceiver);
         } catch (IllegalArgumentException ex)

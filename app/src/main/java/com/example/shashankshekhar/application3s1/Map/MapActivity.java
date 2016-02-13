@@ -41,12 +41,12 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
     final int LOCATION_UPDATE_FREQ_BACKGROUND    = 5 * 1000 * 60; // In milliseconds
     final int LOCATION_UPDATE_DIST = 50; // in meters
     final int REQUEST_EVENT_NAME = 100;
+    ServiceAdapter serviceAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        // TODO: 12/11/15 create an instance of the library class in the oncreate method and that object should be
-        // used to communicate with the library.
+        serviceAdapter = ServiceAdapter.getServiceAdapterinstance(getApplicationContext());
         setupMapView();
         setupLocationManager();
         CommonUtils.printLog("map activity created!!");
@@ -77,7 +77,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         GeoPoint iisc = new GeoPoint(13.03, 77.561514);
         myMapController.setCenter(iisc);
-
     }
 
     @Override
@@ -147,7 +146,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_EVENT_NAME && data !=null) {
             // TODO Extract the data returned from the child Activity.
             String eventName = data.getStringExtra("eventName");
-            ServiceAdapter.publishGlobal(getApplicationContext(), WATER_DATA_TOPIC_NAME, eventName, latitude + "-" + longitude);
+            serviceAdapter.publishGlobal(WATER_DATA_TOPIC_NAME, eventName, latitude + "-" + longitude);
         }
     }
 }
