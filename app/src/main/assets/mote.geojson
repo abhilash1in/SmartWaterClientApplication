@@ -1,0 +1,76 @@
+{
+    "type": "FeatureCollection",
+    "features": [{
+        "geometry": {
+            "type": "Point",
+            "coordinates": [77.56576180458069,13.022641925759727]
+        },
+        "type": "Feature",
+        "id": 0,
+        "properties": {
+            "Mote": "Source",
+            "Id": 2,
+			"URL":"http://smartx.cloudapp.net/water/rt2"
+        }
+    },
+    {
+        "geometry": {
+            "type": "Point",
+            "coordinates": [77.5665181875229,13.023248193341235]
+        },
+        "type": "Feature",
+        "id": 1,
+        "properties": {
+            "Mote": "Source",
+            "Id": 4
+        }
+    },
+        {
+        "geometry": {
+            "type": "Point",
+            "coordinates": [77.5659763813019,13.022908474620577]
+        },
+        "type": "Feature",
+        "id": 2,
+        "properties": {
+            "Mote": "Relay",
+            "Id": 3
+        }
+    },
+        {
+        "geometry": {
+            "type": "Point",
+            "coordinates": [77.56587445735933,13.022856210160672]
+        },
+        "type": "Feature",
+        "id": 3,
+        "properties": {
+            "Mote": "Relay",
+            "Id": 5
+        }
+    },
+        {
+        "geometry": {
+            "type": "Point",
+            "coordinates": [77.56591200828554,13.023091400143434]
+        },
+        "type": "Feature",
+        "id": 4,
+        "properties": {
+            "Mote": "Relay",
+            "Id": 6
+        }
+    },
+        {
+        "geometry": {
+            "type": "Point",
+            "coordinates": [ 77.56643235683443,13.023237740464483]
+        },
+        "type": "Feature",
+        "id": 5,
+        "properties": {
+            "Mote": "Relay",
+            "Id": 7
+        }
+    }]
+}

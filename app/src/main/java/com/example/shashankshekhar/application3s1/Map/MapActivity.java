@@ -20,6 +20,8 @@ import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
 
 //import org.osmdroid.api.Marker;
+import org.osmdroid.bonuspack.kml.KmlDocument;
+import org.osmdroid.bonuspack.overlays.FolderOverlay;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
 import org.osmdroid.bonuspack.overlays.MapEventsReceiver;
@@ -27,6 +29,9 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class MapActivity extends AppCompatActivity implements LocationListener, MapEventsReceiver {
@@ -49,6 +54,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         serviceAdapter = ServiceAdapter.getServiceAdapterinstance(getApplicationContext());
         setupMapView();
         setupLocationManager();
+        addAdditionalLayer();
         CommonUtils.printLog("map activity created!!");
 
         Intent intent = getIntent();
@@ -60,6 +66,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         }
 
     }
+
     private void setupMapView () {
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this, this);
         mapView = (MapView) findViewById(R.id.mapview);
@@ -71,6 +78,35 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         mapView.getOverlays().add(0, mapEventsOverlay);
         myMapController = (MapController) mapView.getController();
         myMapController.setZoom(50);
+    }
+    private void addAdditionalLayer () {
+        String jsonString = null;
+        try {
+            InputStream jsonStream = getAssets().open("mote.geojson");
+            if (jsonStream == null) {
+                CommonUtils.printLog("no stream 1");
+            }
+            int size = jsonStream.available();
+            byte[] buffer = new byte[size];
+            jsonStream.read(buffer);
+            jsonStream.close();
+            jsonString = new String(buffer,"UTF-8");
+            if (jsonString == null){
+                return;
+            }
+        } catch (IOException ex) {
+            CommonUtils.printLog("no stream 2");
+            ex.printStackTrace();
+            return;
+        }
+
+        KmlDocument kmlDocument = new KmlDocument();
+        kmlDocument.parseGeoJSON(jsonString);
+        FolderOverlay sensorOverLay = (FolderOverlay)kmlDocument.mKmlRoot.buildOverlay(mapView,null,null,kmlDocument);
+        mapView.getOverlays().add(sensorOverLay );
+        mapView.invalidate();
+
+
     }
 
     private void setupLocationManager () {
@@ -87,6 +123,12 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
     @Override
     protected void onResume () {
         super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        CommonUtils.printLog("on-pause in map activity called");
     }
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {

@@ -94,5 +94,6 @@
     <orderEntry type="module" module-name="osmbonuspack_v5.1" exported="" />
     <orderEntry type="module" module-name="osmdroid-android-4.2" exported="" />
     <orderEntry type="module" module-name="slf4j-android-1.6.1-RC1" exported="" />
+    <orderEntry type="module" module-name="gson-2.6.1" exported="" />
   </component>
 </module>

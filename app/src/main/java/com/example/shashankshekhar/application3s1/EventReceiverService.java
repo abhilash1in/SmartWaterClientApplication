@@ -57,9 +57,6 @@ public class EventReceiverService extends Service {
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            /*
-            show the notification here. EDIT: showing the notification should not be done here
-             */
             String action =intent.getAction();
             String message = intent.getStringExtra("message");
             if (action.equals(WATER_DATA_TOPIC_NAME))
