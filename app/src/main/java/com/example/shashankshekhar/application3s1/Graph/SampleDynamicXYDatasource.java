@@ -20,9 +20,9 @@ class SampleDynamicXYDatasource {
             super.notifyObservers();
         }
     }
-    private static final int SAMPLE_SIZE = 30;
-    List<Integer> yList = new ArrayList<>(Collections.nCopies(30, 0));
-    List<Integer> xList = new ArrayList<Integer>(Collections.nCopies(30, 0));
+    private static final int SAMPLE_SIZE = 12;
+    List<Integer> yList = new ArrayList<>(Collections.nCopies(SAMPLE_SIZE, 0));
+    List<Integer> xList = new ArrayList<Integer>(Collections.nCopies(SAMPLE_SIZE, 0));
     private MyObservable notifier;
     private boolean keepRunning = false;
     Random randomGenerator = new Random();
@@ -69,7 +69,7 @@ class SampleDynamicXYDatasource {
                         int randomInt = randomGenerator.nextInt(100);
                         xVal+=5;
                         xList.remove(0);
-                        xList.add(29, xVal);
+                        xList.add(SAMPLE_SIZE-1, xVal);
                         notifier.notifyObservers();
                     }
                 } catch (InterruptedException e) {
@@ -101,15 +101,7 @@ class SampleDynamicXYDatasource {
         notifier.deleteObserver(observer);
     }
     public void updateXY(Integer xVal,Integer yVal) {
-//        xList.remove(0);
-        // amake the time in legibl format, everytime a new broadcast is set substact it from the first timestamp
-        // received
-//        xList.add(29,xVal);
         yList.remove(0);
-        yList.add(29, yVal);
-        CommonUtils.printLog("thread id in y update = " + Thread.currentThread().getId());
-//        notifier.notifyObservers();
-//        CommonUtils.printLog("xList: " + xList.toString());
-//        CommonUtils.printLog("yList: " + yList.toString());
+        yList.add(SAMPLE_SIZE-1, yVal);
     }
 }
