@@ -44,7 +44,7 @@ public class Dashboard extends AppCompatActivity {
         // send the topic name here as decided by the UI in the dashboard.
 
         Intent graphIntent = new Intent(this, DynamicGraphActivity.class);
-        graphIntent.putExtra("topicName",SOLAR_DATA_TOPIC_NAME);
+        graphIntent.putExtra("topicName", WATER_LEVEL_TOPIC_MOTE4);
         startActivity(graphIntent);
     }
 

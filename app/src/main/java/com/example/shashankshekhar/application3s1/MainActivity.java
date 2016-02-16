@@ -49,14 +49,14 @@ public class MainActivity extends AppCompatActivity {
             CommonUtils.showToast(getApplicationContext(),"Service not connected");
             return;
         }
-        serviceAdapter.subscribeToTopic(WATER_DATA_TOPIC_NAME);
+        serviceAdapter.subscribeToTopic(WATER_EVENTS_TOPIC);
     }
     public void unsubscribeToTopic (View view ) {
         if (serviceAdapter.serviceConnected() == false) {
             CommonUtils.showToast(getApplicationContext(),"Service not connected");
             return;
         }
-        serviceAdapter.unsubscribeFromTopic( WATER_DATA_TOPIC_NAME);
+        serviceAdapter.unsubscribeFromTopic(WATER_EVENTS_TOPIC);
     }
 
     public void loadMap (View view) {

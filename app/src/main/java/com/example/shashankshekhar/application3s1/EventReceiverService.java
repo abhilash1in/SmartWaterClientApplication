@@ -40,7 +40,7 @@ public class EventReceiverService extends Service {
     }
     public void setupBroadcastReceiver () {
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(WATER_DATA_TOPIC_NAME);
+        intentFilter.addAction(WATER_EVENTS_TOPIC);
         if (broadcastReceiver == null) {
             CommonUtils.printLog("broadcast receiver is null..returning");
             return;
@@ -59,7 +59,7 @@ public class EventReceiverService extends Service {
         public void onReceive(Context context, Intent intent) {
             String action =intent.getAction();
             String message = intent.getStringExtra("message");
-            if (action.equals(WATER_DATA_TOPIC_NAME))
+            if (action.equals(WATER_EVENTS_TOPIC))
             {
                 CommonUtils.printLog("broadcast received in client");
 

@@ -7,8 +7,10 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.support.annotation.IntegerRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
 
 import com.androidplot.Plot;
 import com.androidplot.util.PixelUtils;
@@ -23,6 +25,7 @@ import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.osmdroid.views.overlay.compass.CompassOverlay;
 
 import java.text.DecimalFormat;
 import java.util.Observable;
@@ -36,7 +39,8 @@ public class DynamicGraphActivity extends AppCompatActivity  {
     private String topicName;
     boolean resetTimeStamp = true;
     Integer initalTimeStamp;
-    ServiceAdapter serviceAdapter;private class MyPlotUpdater implements Observer {
+    ServiceAdapter serviceAdapter;
+    private class MyPlotUpdater implements Observer {
         Plot plot;
         public MyPlotUpdater(Plot plot) {
             this.plot = plot;
@@ -50,24 +54,25 @@ public class DynamicGraphActivity extends AppCompatActivity  {
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String messageString = intent.getStringExtra("message");
-            JSONObject jsonObject = null;
             Integer timeStamp = 0;
-            Integer temperature =0;
-            try {
-                jsonObject = new JSONObject(messageString);
-                timeStamp = jsonObject.getInt("Date and Time");
-                timeStamp/=1000;
-                if (resetTimeStamp == true) {
-                    initalTimeStamp = timeStamp;
-                    resetTimeStamp = false;
-                }
-                temperature = jsonObject.getInt("Temperature");
-            } catch (JSONException e ) {
-                CommonUtils.printLog("could not  convert to json");
+            Integer waterLevel =0;
+            String messageString = intent.getStringExtra("message");
+            // break it based on comma and first is timeStamp, second
+            String[] strArray = messageString.split(",");
+            CommonUtils.printLog("timeStamp: " + strArray[0]);
+            CommonUtils.printLog("water level: "+ (strArray[2].split(":"))[1]);
+            if (strArray.length != 3) {
+                return;
             }
-            CommonUtils.printLog(jsonObject.toString());
-            data.updateXY((timeStamp - initalTimeStamp), temperature);
+            timeStamp = Integer.parseInt(strArray[0]);
+            String waterLevelStr = (strArray[2].split(":"))[1];
+            Double waterLvl = Double.parseDouble(waterLevelStr);
+            waterLevel = waterLvl.intValue();
+            if (resetTimeStamp == true) {
+                initalTimeStamp = timeStamp;
+                resetTimeStamp = false;
+            }
+            data.updateXY((timeStamp - initalTimeStamp), waterLevel);
         }
     };
     @Override
@@ -124,6 +129,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
         // set up whole numbers in domain
         dynamicPlot.getGraphWidget().setDomainValueFormat(new DecimalFormat("0"));
         data = new SampleDynamicXYDatasource();
+
         SampleDynamicSeries sine1Series = new SampleDynamicSeries(data, 0, "Plot 1");
         LineAndPointFormatter formatter1 = new LineAndPointFormatter(
                 Color.rgb(0, 0, 0), null, null, null);
@@ -134,18 +140,18 @@ public class DynamicGraphActivity extends AppCompatActivity  {
 
         // hook up the plotUpdater to the data model:
         data.addObserver(plotUpdater);
-
+        data.startPlotting();// starts a new thread
         // thin out domain tick labels so they dont overlap each other:
         dynamicPlot.setDomainStepMode(XYStepMode.INCREMENT_BY_VAL);
         dynamicPlot.setDomainStepValue(5);
 
         dynamicPlot.setRangeStepMode(XYStepMode.INCREMENT_BY_VAL);
-        dynamicPlot.setRangeStepValue(10);
+        dynamicPlot.setRangeStepValue(1);
 
         dynamicPlot.setRangeValueFormat(new DecimalFormat("###.#"));
 
         // uncomment this line to freeze the range boundaries:
-        dynamicPlot.setRangeBoundaries(0, 100, BoundaryMode.FIXED);
+        dynamicPlot.setRangeBoundaries(0, 10, BoundaryMode.FIXED);
 
         // create a dash effect for domain and range grid lines:
         DashPathEffect dashFx = new DashPathEffect(

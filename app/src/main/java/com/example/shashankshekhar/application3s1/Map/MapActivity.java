@@ -75,25 +75,20 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         mapView.setMultiTouchControls(true);
         mapView.setLongClickable(true);
         mapView.setClickable(true);
+        mapView.setMaxZoomLevel(20);
         mapView.getOverlays().add(0, mapEventsOverlay);
         myMapController = (MapController) mapView.getController();
-        myMapController.setZoom(50);
+        myMapController.setZoom(18);
     }
     private void addAdditionalLayer () {
         String jsonString = null;
         try {
             InputStream jsonStream = getAssets().open("mote.geojson");
-            if (jsonStream == null) {
-                CommonUtils.printLog("no stream 1");
-            }
             int size = jsonStream.available();
             byte[] buffer = new byte[size];
             jsonStream.read(buffer);
             jsonStream.close();
             jsonString = new String(buffer,"UTF-8");
-            if (jsonString == null){
-                return;
-            }
         } catch (IOException ex) {
             CommonUtils.printLog("no stream 2");
             ex.printStackTrace();
@@ -105,7 +100,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         FolderOverlay sensorOverLay = (FolderOverlay)kmlDocument.mKmlRoot.buildOverlay(mapView,null,null,kmlDocument);
         mapView.getOverlays().add(sensorOverLay );
         mapView.invalidate();
-
 
     }
 
@@ -188,7 +182,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_EVENT_NAME && data !=null) {
             // TODO Extract the data returned from the child Activity.
             String eventName = data.getStringExtra("eventName");
-            serviceAdapter.publishGlobal(WATER_DATA_TOPIC_NAME, eventName, latitude + "-" + longitude);
+            serviceAdapter.publishGlobal(WATER_EVENTS_TOPIC, eventName, latitude + "-" + longitude);
         }
     }
 }

@@ -21,8 +21,7 @@ class SampleDynamicXYDatasource {
         }
     }
     private static final int SAMPLE_SIZE = 30;
-    private int test ;
-    List<Integer> yList = new ArrayList<Integer>(Collections.nCopies(30, 0));
+    List<Integer> yList = new ArrayList<>(Collections.nCopies(30, 0));
     List<Integer> xList = new ArrayList<Integer>(Collections.nCopies(30, 0));
     private MyObservable notifier;
     private boolean keepRunning = false;
@@ -38,13 +37,14 @@ class SampleDynamicXYDatasource {
 //    public void run() {
 //        try {
 //            keepRunning = true;
-//            test = 0;
+//            int test = 0;
 //            while(keepRunning) {
-//                Thread.sleep(1000);
+//                Thread.sleep(5000);
+//                CommonUtils.printLog("thread id in run = "+ Thread.currentThread().getId());
 //                int randomInt = randomGenerator.nextInt(100);
-//                test++;
-//                yList.remove(0);
-//                yList.add(29, randomInt);
+//                test+=5;
+////                yList.remove(0);
+////                yList.add(29, randomInt);
 //                xList.remove(0);
 //                xList.add(29, test);
 //                notifier.notifyObservers();
@@ -54,6 +54,30 @@ class SampleDynamicXYDatasource {
 //        }
 //
 //    }
+
+
+    public void startPlotting () {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    keepRunning = true;
+                    int xVal = 0;
+                    while(keepRunning) {
+                        Thread.sleep(5000);
+                        CommonUtils.printLog("thread id in run = "+ Thread.currentThread().getId());
+                        int randomInt = randomGenerator.nextInt(100);
+                        xVal+=5;
+                        xList.remove(0);
+                        xList.add(29, xVal);
+                        notifier.notifyObservers();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
     public int getItemCount(int series) {
         return SAMPLE_SIZE;
     }
@@ -77,14 +101,15 @@ class SampleDynamicXYDatasource {
         notifier.deleteObserver(observer);
     }
     public void updateXY(Integer xVal,Integer yVal) {
-        xList.remove(0);
+//        xList.remove(0);
         // amake the time in legibl format, everytime a new broadcast is set substact it from the first timestamp
         // received
-        xList.add(29,xVal);
+//        xList.add(29,xVal);
         yList.remove(0);
         yList.add(29, yVal);
-        notifier.notifyObservers();
-        CommonUtils.printLog("xList: " + xList.toString());
-        CommonUtils.printLog("yList: " + yList.toString());
+        CommonUtils.printLog("thread id in y update = " + Thread.currentThread().getId());
+//        notifier.notifyObservers();
+//        CommonUtils.printLog("xList: " + xList.toString());
+//        CommonUtils.printLog("yList: " + yList.toString());
     }
 }

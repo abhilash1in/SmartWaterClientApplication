@@ -160,6 +160,9 @@ class IncomingHandler extends Handler {
     static final int MQTT_CONNECTION_IN_PROGRESS = 5;
     static final int MQTT_NOT_CONNECTED = 6;
 
+    static final int TOPIC_PUBLISHED = 7;
+    static final int ERROR_IN_PUBLISHING = 8;
+
     Context applicationContext;
     IncomingHandler(Context context) {
         this.applicationContext = context;
@@ -183,6 +186,12 @@ class IncomingHandler extends Handler {
                 break;
             case MQTT_NOT_CONNECTED:
                 CommonUtils.showToast(applicationContext,"Mqtt is not connected");
+                break;
+            case TOPIC_PUBLISHED:
+                CommonUtils.showToast(applicationContext,"Topic Published");
+                break;
+            case ERROR_IN_PUBLISHING:
+                CommonUtils.showToast(applicationContext,"Error in publishing");
                 break;
             default:
 
