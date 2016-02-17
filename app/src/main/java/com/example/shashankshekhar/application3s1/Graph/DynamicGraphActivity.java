@@ -59,8 +59,6 @@ public class DynamicGraphActivity extends AppCompatActivity  {
             String messageString = intent.getStringExtra("message");
             // break it based on comma and first is timeStamp, second
             String[] strArray = messageString.split(",");
-            CommonUtils.printLog("timeStamp: " + strArray[0]);
-            CommonUtils.printLog("water level: "+ (strArray[2].split(":"))[1]);
             if (strArray.length != 3) {
                 return;
             }
@@ -81,7 +79,6 @@ public class DynamicGraphActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_dynamic_graph);
         serviceAdapter = ServiceAdapter.getServiceAdapterinstance(getApplicationContext());
         setupDynamicPlot();
-
         topicName = getIntent().getStringExtra("topicName");
         if (topicName != null) {
             setupBroadcastReceiver();

@@ -20,7 +20,7 @@ class SampleDynamicXYDatasource {
             super.notifyObservers();
         }
     }
-    private static final int SAMPLE_SIZE = 12;
+    private static final int SAMPLE_SIZE = 10;
     List<Integer> yList = new ArrayList<>(Collections.nCopies(SAMPLE_SIZE, 0));
     List<Integer> xList = new ArrayList<Integer>(Collections.nCopies(SAMPLE_SIZE, 0));
     private MyObservable notifier;

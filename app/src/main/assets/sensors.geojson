@@ -1,0 +1,27 @@
+{
+	"type": "FeatureCollection",
+	"features": [{
+        "geometry": {
+            "type": "Point",
+            "coordinates": [77.56590518,13.02285964]
+        },
+        "type": "Feature",
+        "id": 0,
+        "properties": {
+            "Sensor": "Source",
+            "Id": 2
+        }
+    },
+    {
+        "geometry": {
+            "type": "Point",
+            "coordinates": [77.56560892,13.02248009]
+        },
+        "type": "Feature",
+        "id": 1,
+        "properties": {
+            "Sensor": "Source",
+            "Id": 4
+        }
+    }]
+}
