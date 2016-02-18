@@ -40,9 +40,8 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MapActivity extends AppCompatActivity implements LocationListener, MapEventsReceiver {
@@ -58,6 +57,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
     final int LOCATION_UPDATE_DIST = 50; // in meters
     final int REQUEST_EVENT_NAME = 100;
     ServiceAdapter serviceAdapter;
+    List<WaterSensors> waterSensorsList;
+    List<Motes> motesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,66 +102,56 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         Gson gson = new Gson();
         Drawable sensorIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.sensor_icon);
         Drawable moteIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.mote_icon);
-        for (String fileName : geoJasonFileArray) {
-            String jsonString = null;
-            try {
-                InputStream jsonStream = getAssets().open(fileName);
-                int size = jsonStream.available();
-                byte[] buffer = new byte[size];
-                jsonStream.read(buffer);
-                jsonStream.close();
-                jsonString = new String(buffer, "UTF-8");
-            } catch (IOException ex) {
-                CommonUtils.printLog("could not open file" + fileName);
-                ex.printStackTrace();
-                return;
-            }
-            JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
-            JsonArray features = jsonObject.getAsJsonArray("features");
-            for (JsonElement element : features) {
-                JsonObject jObject = element.getAsJsonObject();
-                jObject = jObject.getAsJsonObject("geometry");
-                JsonArray coordArray = jObject.getAsJsonArray("coordinates");
-                GeoPoint geoPoint = new GeoPoint(coordArray.get(1).getAsDouble(), coordArray.get(0).getAsDouble());
-                overlayItem = new OverlayItem("string 1", "string 2", geoPoint);
-                if (fileName.equals("motes.geojson")) {
-                    overlayItem.setMarker(moteIcon);
-                } else if (fileName.equals("sensors.geojson")) {
-                    overlayItem.setMarker(sensorIcon);
-                }
-                itemsArray.add(overlayItem);
-            }
+
+        // populate sensors properties
+        WaterSensors.createJsonString(getApplicationContext());
+        JsonObject jsonObject = gson.fromJson(WaterSensors.getJsonString(), JsonObject.class);
+        JsonArray features = jsonObject.getAsJsonArray("features");
+        for (JsonElement element : features) {
+            WaterSensors waterSensor = new WaterSensors();
+            waterSensor.populateSensordata(element);
+            waterSensorsList.add(waterSensor);
+            overlayItem = new OverlayItem("string 1", "string 2", waterSensor.getLocation());
+            overlayItem.setMarker(sensorIcon);
+            itemsArray.add(overlayItem);
         }
+    }
 
-        ItemizedOverlay<OverlayItem> mMyLocationOverlay;
-        mMyLocationOverlay = new ItemizedIconOverlay<OverlayItem>(itemsArray, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
-            @Override
-            public boolean onItemLongPress(final int index,
-                                           final OverlayItem item) {
-                CommonUtils.printLog("long press registered");
-                return true;
-            }
+    ItemizedOverlay<OverlayItem> mMyLocationOverlay;
+    mMyLocationOverlay=new ItemizedIconOverlay<OverlayItem>(itemsArray,new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>()
 
-            @Override
-            public boolean onItemSingleTapUp(final int index,
-                                             final OverlayItem item) {
-                CommonUtils.printLog("single tap registered");
-                return true;
-            }
-        }, mResourceProxy);
-        // till here
+    {
+        @Override
+        public boolean onItemLongPress ( final int index,
+        final OverlayItem item){
+        CommonUtils.printLog("long press registered");
+        return true;
+    }
+
+        @Override
+        public boolean onItemSingleTapUp ( final int index,
+        final OverlayItem item){
+        CommonUtils.printLog("single tap registered");
+        return true;
+    }
+    }
+
+    ,mResourceProxy);
+    // till here
 
 
-        mapView.getOverlays().add(mMyLocationOverlay);
+    mapView.getOverlays().
 
-        mapView.invalidate();
+    add(mMyLocationOverlay);
+
+    mapView.invalidate();
 
         /* folder overlay code for later reference
         KmlDocument kmlDocument = new KmlDocument();
         kmlDocument.parseGeoJSON(jsonString);
         FolderOverlay sensorOverLay = (FolderOverlay)kmlDocument.mKmlRoot.buildOverlay(mapView,null,null,kmlDocument);
         */
-    }
+}
 
     private void setupLocationManager() {
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);

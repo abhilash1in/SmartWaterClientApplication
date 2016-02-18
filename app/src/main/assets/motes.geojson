@@ -9,7 +9,12 @@
         "id": 2,
         "properties": {
             "Mote": "Relay",
-            "Id": 3
+            "Id": 3,
+			"Platform": "WiSMote",
+			"Frequency": "2.4Hz",
+			"Channel": 2,
+			"URL":"http://smartx.cloudapp.net/water/rt3"
+            "TelemetryTopic":"iisc/smartx/water/telemetry/moteid3"
         }
     },
         {
@@ -21,7 +26,12 @@
         "id": 3,
         "properties": {
             "Mote": "Relay",
-            "Id": 5
+            "Id": 5,
+			"Platform": "WiSMote",
+			"Frequency": "2.4Hz",
+			"Channel": 2,
+			"URL":"http://smartx.cloudapp.net/water/rt5"
+            "TelemetryTopic":"iisc/smartx/water/telemetry/moteid5"
         }
     },
         {
@@ -33,7 +43,12 @@
         "id": 4,
         "properties": {
             "Mote": "Relay",
-            "Id": 6
+            "Id": 6,
+			"Platform": "WiSMote",
+			"Frequency": "2.4Hz",
+			"Channel": 2,
+			"URL":"http://smartx.cloudapp.net/water/rt6"
+            "TelemetryTopic":"iisc/smartx/water/telemetry/moteid6"
         }
     },
         {
@@ -45,7 +60,12 @@
         "id": 5,
         "properties": {
             "Mote": "Relay",
-            "Id": 7
+            "Id": 7,
+			"Platform": "WiSMote",
+			"Frequency": "2.4Hz",
+			"Channel": 2,
+			"URL":"http://smartx.cloudapp.net/water/rt7"
+            "TelemetryTopic":"iisc/smartx/water/telemetry/moteid7"
         }
     }]
 }

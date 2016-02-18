@@ -9,7 +9,11 @@
         "id": 0,
         "properties": {
             "Sensor": "Source",
-            "Id": 2
+            "Id": 2,
+			"Type": "Water Level Sensor",
+			"URL":"http://smartx.cloudapp.net/water/rd"
+            "TelemetryTopic":"iisc/smartx/water/telemetry/moteid2"
+            "WaterDataTopic":"iisc/smartx/water/data/moteid2"
         }
     },
     {
@@ -21,7 +25,11 @@
         "id": 1,
         "properties": {
             "Sensor": "Source",
-            "Id": 4
+            "Id": 4,
+			"Type": "Water Level Sensor",
+			"URL":"http://smartx.cloudapp.net/water/rd"
+            "TelemetryTopic":"iisc/smartx/water/telemetry/moteid4"
+            "WaterDataTopic":"iisc/smartx/water/data/moteid4"
         }
     }]
 }
