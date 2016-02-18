@@ -11,8 +11,8 @@
             "Sensor": "Source",
             "Id": 2,
 			"Type": "Water Level Sensor",
-			"URL":"http://smartx.cloudapp.net/water/rd"
-            "TelemetryTopic":"iisc/smartx/water/telemetry/moteid2"
+			"URL":"http://smartx.cloudapp.net/water/rd",
+            "TelemetryTopic":"iisc/smartx/water/telemetry/moteid2",
             "WaterDataTopic":"iisc/smartx/water/data/moteid2"
         }
     },
@@ -27,8 +27,8 @@
             "Sensor": "Source",
             "Id": 4,
 			"Type": "Water Level Sensor",
-			"URL":"http://smartx.cloudapp.net/water/rd"
-            "TelemetryTopic":"iisc/smartx/water/telemetry/moteid4"
+			"URL":"http://smartx.cloudapp.net/water/rd",
+            "TelemetryTopic":"iisc/smartx/water/telemetry/moteid4",
             "WaterDataTopic":"iisc/smartx/water/data/moteid4"
         }
     }]

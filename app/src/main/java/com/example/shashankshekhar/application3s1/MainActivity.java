@@ -12,7 +12,6 @@ import com.example.shashankshekhar.application3s1.Camera.CameraActivity;
 import static com.example.shashankshekhar.application3s1.CommonUtilities.SmartWaterConstants.*;
 import com.example.shashankshekhar.application3s1.Graph.Dashboard;
 import com.example.shashankshekhar.application3s1.Map.MapActivity;
-import static com.example.shashankshekhar.smartcampuslib.SmartXLibConstants.*;
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
 

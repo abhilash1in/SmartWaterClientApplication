@@ -17,7 +17,7 @@ import android.os.Bundle;
 import com.example.shashankshekhar.application3s1.ListView.ListViewActivity;
 import com.example.shashankshekhar.application3s1.R;
 
-import static com.example.shashankshekhar.smartcampuslib.SmartXLibConstants.*;
+import static com.example.shashankshekhar.application3s1.CommonUtilities.SmartWaterConstants.*;
 
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
@@ -41,7 +41,7 @@ import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 
 public class MapActivity extends AppCompatActivity implements LocationListener, MapEventsReceiver {
@@ -57,8 +57,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
     final int LOCATION_UPDATE_DIST = 50; // in meters
     final int REQUEST_EVENT_NAME = 100;
     ServiceAdapter serviceAdapter;
-    List<WaterSensors> waterSensorsList;
-    List<Motes> motesList;
+    HashMap<WaterSensors,String> waterSensorsMap;
+    HashMap<Motes,String> motesMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +95,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
     }
 
     private void addAdditionalLayer() {
-        String[] geoJasonFileArray = {"motes.geojson", "sensors.geojson"};
         ResourceProxy mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
         ArrayList<OverlayItem> itemsArray = new ArrayList<OverlayItem>();
         OverlayItem overlayItem;
@@ -104,54 +103,71 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         Drawable moteIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.mote_icon);
 
         // populate sensors properties
+        waterSensorsMap = new HashMap<>();
         WaterSensors.createJsonString(getApplicationContext());
         JsonObject jsonObject = gson.fromJson(WaterSensors.getJsonString(), JsonObject.class);
         JsonArray features = jsonObject.getAsJsonArray("features");
         for (JsonElement element : features) {
             WaterSensors waterSensor = new WaterSensors();
             waterSensor.populateSensordata(element);
-            waterSensorsList.add(waterSensor);
-            overlayItem = new OverlayItem("string 1", "string 2", waterSensor.getLocation());
+            String key = "Water_Sensor"+Integer.toString(waterSensor.getSensorId());
+            waterSensorsMap.put(waterSensor,key);
+            overlayItem = new OverlayItem(key,"string 2", waterSensor.getLocation());
             overlayItem.setMarker(sensorIcon);
             itemsArray.add(overlayItem);
         }
-    }
 
-    ItemizedOverlay<OverlayItem> mMyLocationOverlay;
-    mMyLocationOverlay=new ItemizedIconOverlay<OverlayItem>(itemsArray,new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>()
+        // populate motes properties
+        motesMap = new HashMap<>();
+        Motes.createJsonString(getApplicationContext());
+        jsonObject = gson.fromJson(Motes.getJsonString(), JsonObject.class);
+        features = jsonObject.getAsJsonArray("features");
+        for (JsonElement element : features) {
+            Motes mote = new Motes();
+            mote.populateSensordata(element);
+            String key = "Mote"+Integer.toString(mote.getSensorId());
+            motesMap.put(mote,key);
+            overlayItem = new OverlayItem(key, "string 2", mote.getLocation());
+            overlayItem.setMarker(moteIcon);
+            itemsArray.add(overlayItem);
+        }
 
-    {
-        @Override
-        public boolean onItemLongPress ( final int index,
-        final OverlayItem item){
-        CommonUtils.printLog("long press registered");
-        return true;
-    }
+        ItemizedOverlay<OverlayItem> mMyLocationOverlay;
+        mMyLocationOverlay = new ItemizedIconOverlay<OverlayItem>(itemsArray, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>()
 
-        @Override
-        public boolean onItemSingleTapUp ( final int index,
-        final OverlayItem item){
-        CommonUtils.printLog("single tap registered");
-        return true;
-    }
-    }
+        {
+            @Override
+            public boolean onItemLongPress(final int index,
+                                           final OverlayItem item) {
+                return false;
+            }
 
-    ,mResourceProxy);
-    // till here
+            @Override
+            public boolean onItemSingleTapUp(final int index,
+                                             final OverlayItem item) {
+                if (item.getTitle().equals("Mote")) {
 
-
-    mapView.getOverlays().
-
-    add(mMyLocationOverlay);
-
-    mapView.invalidate();
+//                    Intent moteIntent = new Intent(getApplicationContext(), MoteProperties.class);
+//                    graphIntent.putExtra("topicName", WATER_LEVEL_TOPIC_MOTE4);
+//                    startActivity(moteIntent);
+                }
+                else if (item.getTitle().equals("Water_Sensor")) {
+                    Intent sensorIntent = new Intent(getApplicationContext(), SensorProperties.class);
+//                    graphIntent.putExtra("topicName", WATER_LEVEL_TOPIC_MOTE4);
+                    startActivity(sensorIntent);
+                }
+                return true;
+            }
+        }, mResourceProxy);
+        mapView.getOverlays().add(mMyLocationOverlay);
+        mapView.invalidate();
 
         /* folder overlay code for later reference
         KmlDocument kmlDocument = new KmlDocument();
         kmlDocument.parseGeoJSON(jsonString);
         FolderOverlay sensorOverLay = (FolderOverlay)kmlDocument.mKmlRoot.buildOverlay(mapView,null,null,kmlDocument);
         */
-}
+    }
 
     private void setupLocationManager() {
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);

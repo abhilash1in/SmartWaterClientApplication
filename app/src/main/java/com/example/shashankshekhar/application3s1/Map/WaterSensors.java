@@ -24,14 +24,13 @@ public class WaterSensors {
     private String telemetryTopic;
     private GeoPoint location;
     private int sensorId;
-    private String sensorType;
-    private URL webPageUrl;
-    WaterSensors () {
-
-    }
+    private String sensorType; // water level sensor
+    private String webPageUrlString;
+    WaterSensors () {}
     public static String getJsonString() {
         return jsonString;
     }
+
     public static void createJsonString(Context context) {
         try {
             InputStream jsonStream = context.getAssets().open(SENSORS_FILE_NAME);
@@ -48,22 +47,33 @@ public class WaterSensors {
     public GeoPoint getLocation () {
         return location;
     }
+    public String getSensorType () {
+        return sensorType;
+    }
+    public String getWaterDatatopic () {
+        return waterDatatopic;
+    }
+    public String getTelemetryTopic () {
+        return  telemetryTopic;
+    }
+    public String getWebPageUrlString () {
+        return webPageUrlString;
+    }
+    public int getSensorId () {
+        return sensorId;
+    }
     public void populateSensordata(JsonElement element) {
-        JsonObject jObject = element.getAsJsonObject();
-        jObject = jObject.getAsJsonObject("geometry");
-        JsonArray coordArray = jObject.getAsJsonArray("coordinates");
+        JsonObject parentObject = element.getAsJsonObject();
+        JsonObject geoObject = parentObject.getAsJsonObject("geometry");
+        JsonArray coordArray = geoObject.getAsJsonArray("coordinates");
         location = new GeoPoint(coordArray.get(1).getAsDouble(), coordArray.get(0).getAsDouble());
-        jObject = jObject.getAsJsonObject("properties");
-        sensorId = jObject.getAsJsonObject("Id").getAsInt();
-        sensorType = jObject.getAsJsonObject("Type").getAsString();
-        String urlString = jObject.getAsJsonObject("URL").getAsString();
-        try {
-            webPageUrl = new URL(urlString);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        waterDatatopic = jObject.getAsJsonObject("WaterDataTopic").getAsString();
-        telemetryTopic = jObject.getAsJsonObject("TelemetryTopic").getAsString();
+        JsonObject propertiesObject = parentObject.getAsJsonObject("properties");
+//        sensorId = propertiesObject.getAsJsonObject("Id").getAsInt();
+        sensorId = propertiesObject.getAsJsonPrimitive("Id").getAsInt();
+        sensorType = propertiesObject.getAsJsonPrimitive("Type").getAsString();
+        webPageUrlString = propertiesObject.getAsJsonPrimitive("URL").getAsString();
+        waterDatatopic = propertiesObject.getAsJsonPrimitive("WaterDataTopic").getAsString();
+        telemetryTopic = propertiesObject.getAsJsonPrimitive("TelemetryTopic").getAsString();
 
     }
 }

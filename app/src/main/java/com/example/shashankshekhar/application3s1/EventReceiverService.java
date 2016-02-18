@@ -16,12 +16,11 @@ import android.support.v7.app.NotificationCompat;
 import com.example.shashankshekhar.application3s1.Map.MapActivity;
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 
-import static com.example.shashankshekhar.smartcampuslib.SmartXLibConstants.*;
+import static com.example.shashankshekhar.application3s1.CommonUtilities.SmartWaterConstants.*;
 public class EventReceiverService extends Service {
     EventReceiverInterface receiverInterface;
 
-    public EventReceiverService() {
-    }
+    public EventReceiverService() {}
 
     @Override
     public IBinder onBind(Intent intent) {

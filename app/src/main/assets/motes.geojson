@@ -13,7 +13,7 @@
 			"Platform": "WiSMote",
 			"Frequency": "2.4Hz",
 			"Channel": 2,
-			"URL":"http://smartx.cloudapp.net/water/rt3"
+			"URL":"http://smartx.cloudapp.net/water/rt3",
             "TelemetryTopic":"iisc/smartx/water/telemetry/moteid3"
         }
     },
@@ -30,7 +30,7 @@
 			"Platform": "WiSMote",
 			"Frequency": "2.4Hz",
 			"Channel": 2,
-			"URL":"http://smartx.cloudapp.net/water/rt5"
+			"URL":"http://smartx.cloudapp.net/water/rt5",
             "TelemetryTopic":"iisc/smartx/water/telemetry/moteid5"
         }
     },
@@ -47,7 +47,7 @@
 			"Platform": "WiSMote",
 			"Frequency": "2.4Hz",
 			"Channel": 2,
-			"URL":"http://smartx.cloudapp.net/water/rt6"
+			"URL":"http://smartx.cloudapp.net/water/rt6",
             "TelemetryTopic":"iisc/smartx/water/telemetry/moteid6"
         }
     },
@@ -64,7 +64,7 @@
 			"Platform": "WiSMote",
 			"Frequency": "2.4Hz",
 			"Channel": 2,
-			"URL":"http://smartx.cloudapp.net/water/rt7"
+			"URL":"http://smartx.cloudapp.net/water/rt7",
             "TelemetryTopic":"iisc/smartx/water/telemetry/moteid7"
         }
     }]

@@ -16,9 +16,8 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.example.shashankshekhar.application3s1.R;
-import static com.example.shashankshekhar.smartcampuslib.SmartXLibConstants.*;
-
 import java.util.Calendar;
+import static com.example.shashankshekhar.application3s1.CommonUtilities.SmartWaterConstants.*;
 
 public class Dashboard extends AppCompatActivity {
 
