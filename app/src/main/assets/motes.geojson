@@ -16,7 +16,7 @@
 			"Frequency": "2.4Hz",
 			"Channel": 20,
 			"URL":"http://smartx.cloudapp.net/water/rt3",
-            "TelemetryTopic":"iisc/smartx/network/telemetry/modeid3"
+            "TelemetryTopic":"iisc/smartx/network/telemetry/moteid3"
         }
     },
         {
@@ -35,7 +35,7 @@
 			"Frequency": "2.4Hz",
 			"Channel": 20,
 			"URL":"http://smartx.cloudapp.net/water/rt5",
-            "TelemetryTopic":"iisc/smartx/network/telemetry/modeid5"
+            "TelemetryTopic":"iisc/smartx/network/telemetry/moteid5"
         }
     },
         {
@@ -54,7 +54,7 @@
 			"Frequency": "2.4Hz",
 			"Channel": 20,
 			"URL":"http://smartx.cloudapp.net/water/rt7",
-            "TelemetryTopic":"iisc/smartx/network/telemetry/modeid7"
+            "TelemetryTopic":"iisc/smartx/network/telemetry/moteid7"
         }
     }]
 }

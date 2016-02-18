@@ -78,6 +78,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dynamic_graph);
         serviceAdapter = ServiceAdapter.getServiceAdapterinstance(getApplicationContext());
+        CommonUtils.printLog("onCreateCalled, DynamicGraphActivity");
         setupDynamicPlot();
         topicName = getIntent().getStringExtra("topicName");
         if (topicName != null) {
@@ -118,7 +119,12 @@ public class DynamicGraphActivity extends AppCompatActivity  {
         }
         super.onStop();
     }
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // kill the plotter thread
+        data.stopPlotterThread();
+    }
 
     private void setupDynamicPlot () {
         dynamicPlot = (XYPlot)findViewById(R.id.dynamicXYPlot);

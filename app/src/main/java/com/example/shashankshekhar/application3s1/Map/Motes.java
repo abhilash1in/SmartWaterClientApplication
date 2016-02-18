@@ -78,22 +78,22 @@ public class Motes implements Serializable {
         JsonArray coordArray = geoObject.getAsJsonArray("coordinates");
         location = new GeoPoint(coordArray.get(1).getAsDouble(), coordArray.get(0).getAsDouble());
         JsonObject propertiesObject = parentObject.getAsJsonObject("properties");
-        CommonUtils.printLog("log 1");
+
         source = propertiesObject.getAsJsonPrimitive("Source").getAsString();
-        CommonUtils.printLog("log 12");
+
         type = propertiesObject.getAsJsonPrimitive("Type").getAsString();
-        CommonUtils.printLog("log 13");
+
         sensorId = propertiesObject.getAsJsonPrimitive("Id").getAsInt();
-        CommonUtils.printLog("log 14");
+
         webPageUrlString = propertiesObject.getAsJsonPrimitive("URL").getAsString();
-        CommonUtils.printLog("log 15");
+
         telemetryTopic = propertiesObject.getAsJsonPrimitive("TelemetryTopic").getAsString();
-        CommonUtils.printLog("log 16");
+
         platform = propertiesObject.getAsJsonPrimitive("Platform").getAsString();
-        CommonUtils.printLog("log 17");
+
         frequency = propertiesObject.getAsJsonPrimitive("Frequency").getAsString();
-        CommonUtils.printLog("log 18");
+
         channel = propertiesObject.getAsJsonPrimitive("Channel").getAsInt();
-        CommonUtils.printLog("log 19");
+
     }
 }

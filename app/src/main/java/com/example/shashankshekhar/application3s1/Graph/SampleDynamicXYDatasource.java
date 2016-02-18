@@ -25,6 +25,7 @@ class SampleDynamicXYDatasource {
     List<Integer> xList = new ArrayList<Integer>(Collections.nCopies(SAMPLE_SIZE, 0));
     private MyObservable notifier;
     private boolean keepRunning = false;
+    Thread plotterThread;
     Random randomGenerator = new Random();
     {
         notifier = new MyObservable();
@@ -57,26 +58,34 @@ class SampleDynamicXYDatasource {
 
 
     public void startPlotting () {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    keepRunning = true;
-                    int xVal = 0;
-                    while(keepRunning) {
-                        Thread.sleep(5000);
-                        CommonUtils.printLog("thread id in run = "+ Thread.currentThread().getId());
-                        int randomInt = randomGenerator.nextInt(100);
-                        xVal+=5;
-                        xList.remove(0);
-                        xList.add(SAMPLE_SIZE-1, xVal);
-                        notifier.notifyObservers();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    keepRunning = true;
+//                    int xVal = 0;
+//                    while(keepRunning) {
+//                        Thread.sleep(5000);
+//                        CommonUtils.printLog("thread id in run = "+ Thread.currentThread().getId());
+//                        int randomInt = randomGenerator.nextInt(100);
+//                        xVal+=5;
+//                        xList.remove(0);
+//                        xList.add(SAMPLE_SIZE-1, xVal);
+//                        notifier.notifyObservers();
+//                    }
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+        GraphPLotter graphPLotter = new GraphPLotter();
+        plotterThread = new Thread(graphPLotter);
+        plotterThread.start();
+
+    }
+    public void stopPlotterThread() {
+    plotterThread.interrupt();
+        plotterThread = null;
     }
     public int getItemCount(int series) {
         return SAMPLE_SIZE;
@@ -103,5 +112,25 @@ class SampleDynamicXYDatasource {
     public void updateXY(Integer xVal,Integer yVal) {
         yList.remove(0);
         yList.add(SAMPLE_SIZE-1, yVal);
+    }
+    private class GraphPLotter implements Runnable {
+        @Override
+        public void run() {
+            try {
+                keepRunning = true;
+                int xVal = 0;
+                while(keepRunning) {
+                    Thread.sleep(5000);
+                    CommonUtils.printLog("thread id in run = "+ Thread.currentThread().getId());
+                    int randomInt = randomGenerator.nextInt(100);
+                    xVal+=5;
+                    xList.remove(0);
+                    xList.add(SAMPLE_SIZE-1, xVal);
+                    notifier.notifyObservers();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
