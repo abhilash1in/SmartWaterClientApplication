@@ -124,7 +124,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         features = jsonObject.getAsJsonArray("features");
         for (JsonElement element : features) {
             Motes mote = new Motes();
-            mote.populateSensordata(element);
+            mote.populateMotedata(element);
             String key = "Mote-"+Integer.toString(mote.getSensorId());
             motesMap.put(key,mote);
             overlayItem = new OverlayItem(key, "string 2", mote.getLocation());

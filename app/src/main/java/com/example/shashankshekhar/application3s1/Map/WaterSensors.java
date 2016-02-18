@@ -12,8 +12,6 @@ import org.osmdroid.util.GeoPoint;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Created by shashankshekhar on 17/02/16.
@@ -21,11 +19,13 @@ import java.net.URL;
 public class WaterSensors implements Serializable {
     private static final String SENSORS_FILE_NAME = "sensors.geojson";
     private static String jsonString = null;
+    private String source;
+    private String type;
     private String waterDatatopic;
     private String telemetryTopic;
     private GeoPoint location;
     private int sensorId;
-    private String sensorType; // water level sensor
+    private String description; // water level sensor
     private String webPageUrlString;
     WaterSensors () {}
     public static String getJsonString() {
@@ -48,8 +48,8 @@ public class WaterSensors implements Serializable {
     public GeoPoint getLocation () {
         return location;
     }
-    public String getSensorType () {
-        return sensorType;
+    public String getDescription() {
+        return description;
     }
     public String getWaterDatatopic () {
         return waterDatatopic;
@@ -63,18 +63,29 @@ public class WaterSensors implements Serializable {
     public int getSensorId () {
         return sensorId;
     }
+    public String getSource() {return source;}
+    public String getType() {return type;}
     public void populateSensordata(JsonElement element) {
         JsonObject parentObject = element.getAsJsonObject();
         JsonObject geoObject = parentObject.getAsJsonObject("geometry");
         JsonArray coordArray = geoObject.getAsJsonArray("coordinates");
         location = new GeoPoint(coordArray.get(1).getAsDouble(), coordArray.get(0).getAsDouble());
         JsonObject propertiesObject = parentObject.getAsJsonObject("properties");
-//        sensorId = propertiesObject.getAsJsonObject("Id").getAsInt();
+
+        source = propertiesObject.getAsJsonPrimitive("Source").getAsString();
+
+        type = propertiesObject.getAsJsonPrimitive("Type").getAsString();
+
         sensorId = propertiesObject.getAsJsonPrimitive("Id").getAsInt();
-        sensorType = propertiesObject.getAsJsonPrimitive("Type").getAsString();
+
+        description = propertiesObject.getAsJsonPrimitive("Description").getAsString();
+
         webPageUrlString = propertiesObject.getAsJsonPrimitive("URL").getAsString();
+
         waterDatatopic = propertiesObject.getAsJsonPrimitive("WaterDataTopic").getAsString();
+
         telemetryTopic = propertiesObject.getAsJsonPrimitive("TelemetryTopic").getAsString();
+
 
     }
 }

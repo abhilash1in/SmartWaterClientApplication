@@ -8,13 +8,15 @@
         "type": "Feature",
         "id": 2,
         "properties": {
-            "Mote": "Relay",
+            "Source":"Network",
+            "Type":"Telemetry",
             "Id": 3,
+            "Mote": "Relay",
 			"Platform": "WiSMote",
 			"Frequency": "2.4Hz",
-			"Channel": 2,
+			"Channel": 20,
 			"URL":"http://smartx.cloudapp.net/water/rt3",
-            "TelemetryTopic":"iisc/smartx/water/telemetry/moteid3"
+            "TelemetryTopic":"iisc/smartx/network/telemetry/modeid3"
         }
     },
         {
@@ -25,30 +27,15 @@
         "type": "Feature",
         "id": 3,
         "properties": {
-            "Mote": "Relay",
+            "Source":"Network",
+            "Type":"Telemetry",
             "Id": 5,
-			"Platform": "WiSMote",
-			"Frequency": "2.4Hz",
-			"Channel": 2,
-			"URL":"http://smartx.cloudapp.net/water/rt5",
-            "TelemetryTopic":"iisc/smartx/water/telemetry/moteid5"
-        }
-    },
-        {
-        "geometry": {
-            "type": "Point",
-            "coordinates": [77.56563762,13.0224926]
-        },
-        "type": "Feature",
-        "id": 4,
-        "properties": {
             "Mote": "Relay",
-            "Id": 6,
 			"Platform": "WiSMote",
 			"Frequency": "2.4Hz",
-			"Channel": 2,
-			"URL":"http://smartx.cloudapp.net/water/rt6",
-            "TelemetryTopic":"iisc/smartx/water/telemetry/moteid6"
+			"Channel": 20,
+			"URL":"http://smartx.cloudapp.net/water/rt5",
+            "TelemetryTopic":"iisc/smartx/network/telemetry/modeid5"
         }
     },
         {
@@ -59,13 +46,15 @@
         "type": "Feature",
         "id": 5,
         "properties": {
-            "Mote": "Relay",
+            "Source":"Network",
+            "Type":"Telemetry",
             "Id": 7,
-			"Platform": "WiSMote",
+            "Mote": "Relay",
+            "Platform": "WiSMote",
 			"Frequency": "2.4Hz",
-			"Channel": 2,
+			"Channel": 20,
 			"URL":"http://smartx.cloudapp.net/water/rt7",
-            "TelemetryTopic":"iisc/smartx/water/telemetry/moteid7"
+            "TelemetryTopic":"iisc/smartx/network/telemetry/modeid7"
         }
     }]
 }

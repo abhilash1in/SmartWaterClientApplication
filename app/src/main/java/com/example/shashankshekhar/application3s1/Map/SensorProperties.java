@@ -1,12 +1,17 @@
 package com.example.shashankshekhar.application3s1.Map;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.View;
 import android.widget.TextView;
 
+import com.example.shashankshekhar.application3s1.Graph.DynamicGraphActivity;
 import com.example.shashankshekhar.application3s1.R;
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
+
+import static com.example.shashankshekhar.application3s1.CommonUtilities.SmartWaterConstants.WATER_LEVEL_TOPIC_MOTE4;
 
 public class SensorProperties extends AppCompatActivity {
 
@@ -17,8 +22,16 @@ public class SensorProperties extends AppCompatActivity {
         WaterSensors sensor = (WaterSensors)getIntent().getSerializableExtra("sensorObj");
         CommonUtils.printLog("mote id: " + sensor.getSensorId());
 
+        TextView source = (TextView)findViewById(R.id.text_view7);
+        String sourceString = "<b>Source:</b> " + sensor.getSource();
+        source.setText(Html.fromHtml(sourceString));
+
+        TextView type = (TextView)findViewById(R.id.text_view8);
+        sourceString = "<b>Type:</b> " + sensor.getType();
+        type.setText(Html.fromHtml(sourceString));
+
         TextView sensorId = (TextView)findViewById(R.id.text_view1);
-        String sourceString = "<b>Sensor Id:</b> " + Integer.toString(sensor.getSensorId());
+        sourceString = "<b>Sensor Id:</b> " + Integer.toString(sensor.getSensorId());
         sensorId.setText(Html.fromHtml(sourceString));
 
         TextView geoLocation = (TextView)findViewById(R.id.text_view2);
@@ -38,7 +51,12 @@ public class SensorProperties extends AppCompatActivity {
         channel.setText(Html.fromHtml(sourceString));
 
         TextView topic = (TextView)findViewById(R.id.text_view6);
-        sourceString = "<b>Description:</b> "+sensor.getSensorType();
+        sourceString = "<b>Description:</b> "+sensor.getDescription();
         topic.setText(Html.fromHtml(sourceString));
+    }
+    public void showGraph (View view){
+        Intent graphIntent = new Intent(this, DynamicGraphActivity.class);
+        graphIntent.putExtra("topicName", WATER_LEVEL_TOPIC_MOTE4);
+        startActivity(graphIntent);
     }
 }

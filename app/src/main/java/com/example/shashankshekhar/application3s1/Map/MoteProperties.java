@@ -19,8 +19,16 @@ public class MoteProperties extends AppCompatActivity {
         Motes mote = (Motes)getIntent().getSerializableExtra("moteObj");
         CommonUtils.printLog("mote id: " + mote.getSensorId());
 
+        TextView source = (TextView)findViewById(R.id.text_view8);
+        String sourceString = "<b>Source:</b> " + mote.getSource();
+        source.setText(Html.fromHtml(sourceString));
+
+        TextView type = (TextView)findViewById(R.id.text_view9);
+        sourceString = "<b>Type:</b> " + mote.getType();
+        type.setText(Html.fromHtml(sourceString));
+
         TextView sensorId = (TextView)findViewById(R.id.text_view1);
-        String sourceString = "<b>Mote Id:</b> " + Integer.toString(mote.getSensorId());
+        sourceString = "<b>Mote Id:</b> " + Integer.toString(mote.getSensorId());
         sensorId.setText(Html.fromHtml(sourceString));
 
         TextView geoLocation = (TextView)findViewById(R.id.text_view2);
@@ -49,6 +57,6 @@ public class MoteProperties extends AppCompatActivity {
 
     }
     public void showGraph (View view){
-
+        return;
     }
 }

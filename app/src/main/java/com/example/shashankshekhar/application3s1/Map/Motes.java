@@ -21,6 +21,8 @@ import java.net.URL;
 public class Motes implements Serializable {
     private static final String MOTES_FILE_NAME  ="motes.geojson";
     private static String jsonString;
+    private String source;
+    private String type;
     private String telemetryTopic;
     private GeoPoint location;
     private int sensorId;
@@ -67,17 +69,31 @@ public class Motes implements Serializable {
     public int getChannel() {
         return channel;
     }
-    public void populateSensordata(JsonElement element) {
+    public String getSource() {return source;}
+    public String getType() {return type;}
+
+    public void populateMotedata(JsonElement element) {
         JsonObject parentObject = element.getAsJsonObject();
         JsonObject geoObject  = parentObject.getAsJsonObject("geometry");
         JsonArray coordArray = geoObject.getAsJsonArray("coordinates");
         location = new GeoPoint(coordArray.get(1).getAsDouble(), coordArray.get(0).getAsDouble());
         JsonObject propertiesObject = parentObject.getAsJsonObject("properties");
+        CommonUtils.printLog("log 1");
+        source = propertiesObject.getAsJsonPrimitive("Source").getAsString();
+        CommonUtils.printLog("log 12");
+        type = propertiesObject.getAsJsonPrimitive("Type").getAsString();
+        CommonUtils.printLog("log 13");
         sensorId = propertiesObject.getAsJsonPrimitive("Id").getAsInt();
+        CommonUtils.printLog("log 14");
         webPageUrlString = propertiesObject.getAsJsonPrimitive("URL").getAsString();
+        CommonUtils.printLog("log 15");
         telemetryTopic = propertiesObject.getAsJsonPrimitive("TelemetryTopic").getAsString();
+        CommonUtils.printLog("log 16");
         platform = propertiesObject.getAsJsonPrimitive("Platform").getAsString();
+        CommonUtils.printLog("log 17");
         frequency = propertiesObject.getAsJsonPrimitive("Frequency").getAsString();
+        CommonUtils.printLog("log 18");
         channel = propertiesObject.getAsJsonPrimitive("Channel").getAsInt();
+        CommonUtils.printLog("log 19");
     }
 }

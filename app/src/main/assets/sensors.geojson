@@ -8,12 +8,13 @@
         "type": "Feature",
         "id": 0,
         "properties": {
-            "Sensor": "Source",
+            "Source": "Sensor",
+            "Type": "Synthetic",
             "Id": 2,
-			"Type": "Water Level Sensor",
+            "Description":"Water Level Sensor",
 			"URL":"http://smartx.cloudapp.net/water/rd",
-            "TelemetryTopic":"iisc/smartx/water/telemetry/moteid2",
-            "WaterDataTopic":"iisc/smartx/water/data/moteid2"
+            "WaterDataTopic":"iisc/smartx/sensor/water/modeid2",
+            "TelemetryTopic":"iisc/smartx/network/telemetry/modeid2"
         }
     },
     {
@@ -24,12 +25,13 @@
         "type": "Feature",
         "id": 1,
         "properties": {
-            "Sensor": "Source",
+            "Source": "Sensor",
+            "Type": "Synthetic",
             "Id": 4,
-			"Type": "Water Level Sensor",
+            "Description":"Water Level Sensor",
 			"URL":"http://smartx.cloudapp.net/water/rd",
-            "TelemetryTopic":"iisc/smartx/water/telemetry/moteid4",
-            "WaterDataTopic":"iisc/smartx/water/data/moteid4"
+            "WaterDataTopic":"iisc/smartx/sensor/water/modeid4",
+            "TelemetryTopic":"iisc/smartx/network/telemetry/modeid4"
         }
     }]
 }
