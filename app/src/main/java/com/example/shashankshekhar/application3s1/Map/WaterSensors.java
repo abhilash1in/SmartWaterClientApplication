@@ -11,13 +11,14 @@ import org.osmdroid.util.GeoPoint;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
  * Created by shashankshekhar on 17/02/16.
  */
-public class WaterSensors {
+public class WaterSensors implements Serializable {
     private static final String SENSORS_FILE_NAME = "sensors.geojson";
     private static String jsonString = null;
     private String waterDatatopic;

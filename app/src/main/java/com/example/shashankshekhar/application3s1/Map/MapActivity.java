@@ -57,8 +57,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
     final int LOCATION_UPDATE_DIST = 50; // in meters
     final int REQUEST_EVENT_NAME = 100;
     ServiceAdapter serviceAdapter;
-    HashMap<WaterSensors,String> waterSensorsMap;
-    HashMap<Motes,String> motesMap;
+    HashMap<String,WaterSensors> waterSensorsMap;
+    HashMap<String,Motes> motesMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +99,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         ArrayList<OverlayItem> itemsArray = new ArrayList<OverlayItem>();
         OverlayItem overlayItem;
         Gson gson = new Gson();
-        Drawable sensorIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.sensor_icon);
+        final Drawable sensorIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.sensor_icon);
         Drawable moteIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.mote_icon);
 
         // populate sensors properties
@@ -110,8 +110,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         for (JsonElement element : features) {
             WaterSensors waterSensor = new WaterSensors();
             waterSensor.populateSensordata(element);
-            String key = "Water_Sensor"+Integer.toString(waterSensor.getSensorId());
-            waterSensorsMap.put(waterSensor,key);
+            String key = "Water_Sensor-"+Integer.toString(waterSensor.getSensorId());
+            waterSensorsMap.put(key,waterSensor);
             overlayItem = new OverlayItem(key,"string 2", waterSensor.getLocation());
             overlayItem.setMarker(sensorIcon);
             itemsArray.add(overlayItem);
@@ -125,8 +125,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         for (JsonElement element : features) {
             Motes mote = new Motes();
             mote.populateSensordata(element);
-            String key = "Mote"+Integer.toString(mote.getSensorId());
-            motesMap.put(mote,key);
+            String key = "Mote-"+Integer.toString(mote.getSensorId());
+            motesMap.put(key,mote);
             overlayItem = new OverlayItem(key, "string 2", mote.getLocation());
             overlayItem.setMarker(moteIcon);
             itemsArray.add(overlayItem);
@@ -145,15 +145,18 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
             @Override
             public boolean onItemSingleTapUp(final int index,
                                              final OverlayItem item) {
-                if (item.getTitle().equals("Mote")) {
-
-//                    Intent moteIntent = new Intent(getApplicationContext(), MoteProperties.class);
-//                    graphIntent.putExtra("topicName", WATER_LEVEL_TOPIC_MOTE4);
-//                    startActivity(moteIntent);
+                String[] str = item.getTitle().split("-");
+                if (str[0].equals("Mote")) {
+                    Motes motesObj = motesMap.get(item.getTitle());
+                    Intent moteIntent = new Intent(getApplicationContext(), MoteProperties.class);
+                    moteIntent.putExtra("moteObj",motesObj);
+                    Bundle bundle = new Bundle();
+                    startActivity(moteIntent);
                 }
-                else if (item.getTitle().equals("Water_Sensor")) {
+                else if (str[0].equals("Water_Sensor")) {
+                    WaterSensors sensor = waterSensorsMap.get(item.getTitle());
                     Intent sensorIntent = new Intent(getApplicationContext(), SensorProperties.class);
-//                    graphIntent.putExtra("topicName", WATER_LEVEL_TOPIC_MOTE4);
+                    sensorIntent.putExtra("sensorObj",sensor);
                     startActivity(sensorIntent);
                 }
                 return true;
@@ -171,7 +174,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
 
     private void setupLocationManager() {
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        GeoPoint iisc = new GeoPoint(13.03, 77.561514);
+//        GeoPoint iisc = new GeoPoint(13.03, 77.561514);
+        GeoPoint iisc = new GeoPoint(13.0224926, 77.56563762);
         myMapController.setCenter(iisc);
     }
 

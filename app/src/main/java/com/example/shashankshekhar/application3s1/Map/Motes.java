@@ -11,13 +11,14 @@ import org.osmdroid.util.GeoPoint;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
  * Created by shashankshekhar on 17/02/16.
  */
-public class Motes {
+public class Motes implements Serializable {
     private static final String MOTES_FILE_NAME  ="motes.geojson";
     private static String jsonString;
     private String telemetryTopic;
@@ -63,7 +64,7 @@ public class Motes {
     public String getFrequency() {
         return frequency;
     }
-    private int getChannel() {
+    public int getChannel() {
         return channel;
     }
     public void populateSensordata(JsonElement element) {
