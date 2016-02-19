@@ -13,7 +13,7 @@
             "Id": 3,
             "Mote": "Relay",
 			"Platform": "WiSMote",
-			"Frequency": "2.4Hz",
+			"Frequency": "2.4GHz",
 			"Channel": 20,
 			"URL":"http://smartx.cloudapp.net/water/rt3",
             "TelemetryTopic":"iisc/smartx/network/telemetry/moteid3"
@@ -32,12 +32,31 @@
             "Id": 5,
             "Mote": "Relay",
 			"Platform": "WiSMote",
-			"Frequency": "2.4Hz",
+			"Frequency": "2.4GHz"'
 			"Channel": 20,
 			"URL":"http://smartx.cloudapp.net/water/rt5",
             "TelemetryTopic":"iisc/smartx/network/telemetry/moteid5"
         }
     },
+    {
+            "geometry": {
+                "type": "Point",
+                "coordinates": [77.56563762,13.0224926]
+            },
+            "type": "Feature",
+            "id": 4,
+            "properties": {
+                "Source":"Network",
+                "Type":"Telemetry",
+                "Id": 6,
+                "Mote": "Relay",
+    			"Platform": "WiSMote",
+    			"Frequency": "2.4GHz",
+    			"Channel": 20,
+    			"URL":"http://smartx.cloudapp.net/water/rt6",
+                "TelemetryTopic":"iisc/smartx/water/telemetry/moteid6"
+            }
+        },
         {
         "geometry": {
             "type": "Point",
@@ -51,7 +70,7 @@
             "Id": 7,
             "Mote": "Relay",
             "Platform": "WiSMote",
-			"Frequency": "2.4Hz",
+			"Frequency": "2.4GHz",
 			"Channel": 20,
 			"URL":"http://smartx.cloudapp.net/water/rt7",
             "TelemetryTopic":"iisc/smartx/network/telemetry/moteid7"
