@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.shashankshekhar.application3s1.R;
+import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 
 public class NavDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -76,8 +77,9 @@ public class NavDrawer extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-        } else if (id == R.id.nav_map) {
 
+        } else if (id == R.id.nav_map) {
+            CommonUtils.printLog("map pressed");
         } else if (id == R.id.nav_graph) {
 
         } else if (id == R.id.nav_settings) {
