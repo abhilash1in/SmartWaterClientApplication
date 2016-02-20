@@ -84,7 +84,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this, this);
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
-        mapView.setBuiltInZoomControls(true);
+//        mapView.setBuiltInZoomControls(true);
         mapView.setMultiTouchControls(true);
         mapView.setLongClickable(true);
         mapView.setClickable(true);

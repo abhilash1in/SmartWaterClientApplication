@@ -9,23 +9,11 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <LinearLayout
-        xmlns:tileSource="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <include
+        layout="@layout/app_bar_nav_drawer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.example.shashankshekhar.application3s1.Map.MapActivity">
+        android:layout_height="match_parent"/>
 
-        <org.osmdroid.views.MapView
-            android:id="@+id/mapview"
-            tileSource="Mapnik"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="2.07"
-            android:clickable="true"
-            android:longClickable="true"/>
-
-    </LinearLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
@@ -36,5 +24,3 @@
         app:menu="@menu/activity_nav_drawer_drawer"/>
 
 </android.support.v4.widget.DrawerLayout>
-
-

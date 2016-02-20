@@ -17,15 +17,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+
+        </activity>
+        <activity
+            android:name=".Map.MapActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".Map.MapActivity"
-            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".Camera.CameraActivity"
@@ -53,9 +54,17 @@
             android:name=".Graph.DynamicGraphActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Map.SensorProperties">
+        <activity android:name=".Map.SensorProperties"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Map.MoteProperties">
+        <activity android:name=".Map.MoteProperties"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".NavigationDrawer.NavDrawer"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_nav_drawer"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 
