@@ -20,7 +20,7 @@ public class ListViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_view);
         listView = (ListView) findViewById(R.id.list_view);
-        values  = new String[]{"Water Leakage","Water Overflow","ABC","XYZ"};
+        values  = new String[]{"Water Leakage","Water Overflow","Water Contamination","Maintenance"};
         ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,  android.R.id.text1,values);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

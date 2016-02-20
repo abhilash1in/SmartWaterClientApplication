@@ -121,8 +121,8 @@ class SampleDynamicXYDatasource {
                 int xVal = 0;
                 while(keepRunning) {
                     Thread.sleep(5000);
-                    CommonUtils.printLog("thread id in run = "+ Thread.currentThread().getId());
-                    int randomInt = randomGenerator.nextInt(100);
+//                    CommonUtils.printLog("thread id in run = "+ Thread.currentThread().getId());
+//                    int randomInt = randomGenerator.nextInt(100);
                     xVal+=5;
                     xList.remove(0);
                     xList.add(SAMPLE_SIZE-1, xVal);
