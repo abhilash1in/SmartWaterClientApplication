@@ -16,9 +16,48 @@
 			"Frequency": "2.4GHz",
 			"Channel": 20,
 			"URL":"http://smartx.cds.iisc.ac.in/water/rt3",
-            "TelemetryTopic":"iisc/smartx/network/telemetry/moteid3"
+            "Topic":"iisc/smartx/network/telemetry/moteid3"
         }
     },
+    {
+            "geometry": {
+                "type": "Point",
+                "coordinates": [77.56590518,13.02285964]
+            },
+            "type": "Feature",
+            "id": 0,
+            "properties": {
+    			"Source":"Network",
+                "Type":"Telemetry",
+                "Id": 2,
+                "Mote": "Source",
+    			"Platform": "WiSMote",
+    			"Frequency": "2.4GHz",
+    			"Channel": 20,
+    			"Topic":"iisc/smartx/network/telemetry/moteid2",
+    			"URL":"http://smartx.cds.iisc.ac.in/water/rt2"
+            }
+        },
+        {
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [ 77.56560892,13.02248009]
+                },
+                "type": "Feature",
+                "id": 1,
+                "properties": {
+        			"Source":"Network",
+                    "Type":"Telemetry",
+                    "Id": 4,
+                    "Mote": "Source",
+        			"Platform": "WiSMote",
+        			"Frequency": "2.4GHz",
+        			"Channel": 20,
+        			"Topic":"iisc/smartx/network/telemetry/moteid4",
+        			"URL":"http://smartx.cds.iisc.ac.in/water/rt4"
+
+                }
+            },
         {
         "geometry": {
             "type": "Point",
@@ -35,7 +74,7 @@
 			"Frequency": "2.4GHz",
 			"Channel": 20,
 			"URL":"http://smartx.cds.iisc.ac.in/water/rt5",
-            "TelemetryTopic":"iisc/smartx/network/telemetry/moteid5"
+            "Topic":"iisc/smartx/network/telemetry/moteid5"
         }
     },
         {
@@ -54,7 +93,26 @@
 			"Frequency": "2.4GHz",
 			"Channel": 20,
 			"URL":"http://smartx.cds.iisc.ac.in/water/rt7",
-            "TelemetryTopic":"iisc/smartx/network/telemetry/moteid7"
+            "Topic":"iisc/smartx/network/telemetry/moteid7"
         }
-    }]
+    },
+    {
+    	        "geometry": {
+                "type": "Point",
+                "coordinates": [77.56583251,13.02292889]
+            },
+            "type": "Feature",
+            "id": 6,
+            "properties": {
+                "Source":"Network",
+                "Type":"Telemetry",
+                "Id": 6,
+                "Mote": "Source",
+                "Platform": "WiSMote",
+    			"Frequency": "2.4GHz",
+    			"Channel": 20,
+                "Topic":"iisc/smartx/network/telemetry/moteid6",
+    			"URL":"http://smartx.cds.iisc.ac.in/water/rt6"
+            }
+        }]
 }

@@ -1,22 +1,24 @@
 package com.example.shashankshekhar.application3s1.Map;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.shashankshekhar.application3s1.Graph.DynamicGraphActivity;
+import com.example.shashankshekhar.application3s1.Graph.DynamicMoteGraph;
 import com.example.shashankshekhar.application3s1.R;
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 
 public class MoteProperties extends AppCompatActivity {
-
+    Motes mote;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mote_properties);
-        Motes mote = (Motes)getIntent().getSerializableExtra("moteObj");
+        mote = (Motes)getIntent().getSerializableExtra("moteObj");
         CommonUtils.printLog("mote id: " + mote.getSensorId());
 
         TextView source = (TextView)findViewById(R.id.text_view8);
@@ -48,7 +50,7 @@ public class MoteProperties extends AppCompatActivity {
         channel.setText(Html.fromHtml(sourceString));
 
         TextView topic = (TextView)findViewById(R.id.text_view6);
-        sourceString = "<b>Telemetry Topic:</b> "+mote.getTelemetryTopic();
+        sourceString = "<b>Topic:</b> "+mote.getTopic();
         topic.setText(Html.fromHtml(sourceString));
 
         TextView url= (TextView)findViewById(R.id.text_view7);
@@ -57,6 +59,8 @@ public class MoteProperties extends AppCompatActivity {
 
     }
     public void showGraph (View view){
-        return;
+        Intent graphIntent = new Intent(this, DynamicMoteGraph.class);
+        graphIntent.putExtra("topicName",mote.getTopic());
+        startActivity(graphIntent);
     }
 }

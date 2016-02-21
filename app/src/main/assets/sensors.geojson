@@ -12,9 +12,8 @@
             "Type": "Synthetic",
             "Id": 2,
             "Description":"Water Level Sensor",
-			"URL":"http://smartx.cloudapp.net/water/rd",
-            "WaterDataTopic":"iisc/smartx/sensor/water/moteid2",
-            "TelemetryTopic":"iisc/smartx/network/telemetry/moteid2"
+			"URL":"http://smartx.cds.iisc.ac.in/water/rd2",
+            "Topic":"iisc/smartx/sensor/water/moteid2"
         }
     },
     {
@@ -29,9 +28,8 @@
             "Type": "Synthetic",
             "Id": 4,
             "Description":"Water Level Sensor",
-			"URL":"http://smartx.cloudapp.net/water/rd",
-            "WaterDataTopic":"iisc/smartx/sensor/water/moteid4",
-            "TelemetryTopic":"iisc/smartx/network/telemetry/moteid4"
+			"URL":"http://smartx.cds.iisc.ac.in/water/rd",
+            "Topic":"iisc/smartx/sensor/water/moteid4"
         }
     },
     {
@@ -47,9 +45,7 @@
                 "Id": 6,
                 "Description":"Water Level Sensor",
                 "URL":"http://smartx.cds.iisc.ac.in/water/rd6",
-    			"WaterDataTopic":"iisc/smartx/sensor/water/moteid6",
-    			"TelemetryTopic":"iisc/smartx/network/telemetry/moteid6"
-
+    			"Topic":"iisc/smartx/sensor/water/moteid6"
             }
         }
     ]

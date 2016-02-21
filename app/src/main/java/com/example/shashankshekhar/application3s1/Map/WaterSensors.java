@@ -21,8 +21,7 @@ public class WaterSensors implements Serializable {
     private static String jsonString = null;
     private String source;
     private String type;
-    private String waterDatatopic;
-    private String telemetryTopic;
+    private String topic;
     private GeoPoint location;
     private int sensorId;
     private String description; // water level sensor
@@ -51,11 +50,8 @@ public class WaterSensors implements Serializable {
     public String getDescription() {
         return description;
     }
-    public String getWaterDatatopic () {
-        return waterDatatopic;
-    }
-    public String getTelemetryTopic () {
-        return  telemetryTopic;
+    public String getTopic() {
+        return topic;
     }
     public String getWebPageUrlString () {
         return webPageUrlString;
@@ -82,10 +78,6 @@ public class WaterSensors implements Serializable {
 
         webPageUrlString = propertiesObject.getAsJsonPrimitive("URL").getAsString();
 
-        waterDatatopic = propertiesObject.getAsJsonPrimitive("WaterDataTopic").getAsString();
-
-        telemetryTopic = propertiesObject.getAsJsonPrimitive("TelemetryTopic").getAsString();
-
-
+        topic = propertiesObject.getAsJsonPrimitive("Topic").getAsString();
     }
 }

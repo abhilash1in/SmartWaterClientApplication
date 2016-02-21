@@ -24,7 +24,7 @@ public class SampleDynamicMoteDataSource {
     public static final int EXP_TRANS = 1;
     public static final int CUM_FR = 2;
     public static final int BAT_VOL = 3;
-    private static final int SAMPLE_SIZE = 10;
+    private static final int SAMPLE_SIZE = 3;
     private MyObservable notifier;
     List<Integer> frameDropped = new ArrayList<>(Collections.nCopies(SAMPLE_SIZE, 0));
     List<Integer> expectedTransmission = new ArrayList<>(Collections.nCopies(SAMPLE_SIZE, 0));

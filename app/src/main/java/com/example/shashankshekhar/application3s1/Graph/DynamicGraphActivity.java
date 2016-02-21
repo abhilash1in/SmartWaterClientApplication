@@ -146,7 +146,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
 //        data.startPlotting();// starts a new thread
         // thin out domain tick labels so they dont overlap each other:
         dynamicPlot.setDomainStepMode(XYStepMode.INCREMENT_BY_VAL);
-        dynamicPlot.setDomainStepValue(10);
+        dynamicPlot.setDomainStepValue(20);
 
         dynamicPlot.setRangeStepMode(XYStepMode.INCREMENT_BY_VAL);
         dynamicPlot.setRangeStepValue(1);

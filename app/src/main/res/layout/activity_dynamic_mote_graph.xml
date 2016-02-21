@@ -26,9 +26,9 @@
         androidPlot.graphWidget.rangeOriginLabelPaint.textSize="15sp"
         androidPlot.graphWidget.domainLabelPaint.textSize="15sp"
         androidPlot.graphWidget.domainOriginLabelPaint.textSize="15sp"
-        ap:legendTextSize="15sp"
-        ap:legendIconHeight="15dp"
-        ap:legendIconWidth="15dp"
-        ap:legendHeight="25dp"
+        ap:legendTextSize="12sp"
+        ap:legendIconHeight="12dp"
+        ap:legendIconWidth="12dp"
+        ap:legendHeight="18dp"
         ap:legendAnchorPosition="right_bottom"/>
 </LinearLayout>

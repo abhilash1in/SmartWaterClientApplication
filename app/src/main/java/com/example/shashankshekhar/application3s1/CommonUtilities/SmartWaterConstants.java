@@ -7,7 +7,7 @@ public final class SmartWaterConstants {
     private SmartWaterConstants () {}; // no instantiation
 
     // mqtt constants for this appplication
-    public static  final String WATER_EVENTS_TOPIC = "iisc/smartx/water/mobile/data";
+    public static  final String WATER_EVENTS_TOPIC = "iisc/smartx/mobile/water/data";
     public static  final String WATER_LEVEL_TOPIC_MOTE4 = "iisc/smartx/sensor/water/moteid4";
     public static  final String WATER_LEVEL_TOPIC_MOTE2 = "iisc/smartx/sensor/water/moteid2";
 

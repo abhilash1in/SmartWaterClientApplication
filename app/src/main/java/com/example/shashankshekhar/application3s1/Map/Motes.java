@@ -12,8 +12,6 @@ import org.osmdroid.util.GeoPoint;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Created by shashankshekhar on 17/02/16.
@@ -23,7 +21,7 @@ public class Motes implements Serializable {
     private static String jsonString;
     private String source;
     private String type;
-    private String telemetryTopic;
+    private String topic;
     private GeoPoint location;
     private int sensorId;
     private String platform;
@@ -54,8 +52,8 @@ public class Motes implements Serializable {
     public int getSensorId () {
         return sensorId;
     }
-    public String getTelemetryTopic () {
-        return  telemetryTopic;
+    public String getTopic() {
+        return topic;
     }
     public String getWebPageUrlString () {
         return webPageUrlString;
@@ -87,7 +85,7 @@ public class Motes implements Serializable {
 
         webPageUrlString = propertiesObject.getAsJsonPrimitive("URL").getAsString();
 
-        telemetryTopic = propertiesObject.getAsJsonPrimitive("TelemetryTopic").getAsString();
+        topic = propertiesObject.getAsJsonPrimitive("Topic").getAsString();
 
         platform = propertiesObject.getAsJsonPrimitive("Platform").getAsString();
 

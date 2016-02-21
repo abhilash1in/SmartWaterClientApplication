@@ -20,7 +20,7 @@ class SampleDynamicXYDatasource {
             super.notifyObservers();
         }
     }
-    private static final int SAMPLE_SIZE = 10;
+    private static final int SAMPLE_SIZE = 5;
     List<Integer> yList = new ArrayList<>(Collections.nCopies(SAMPLE_SIZE, 0));
     List<Integer> xList = new ArrayList<Integer>(Collections.nCopies(SAMPLE_SIZE, 0));
     private MyObservable notifier;
@@ -64,9 +64,10 @@ class SampleDynamicXYDatasource {
     }
     public void updateXY(Integer xVal,Integer yVal) {
         xList.remove(0);
-        xList.add(SAMPLE_SIZE-1,xVal);
+        xList.add(SAMPLE_SIZE - 1, xVal);
         yList.remove(0);
-        yList.add(SAMPLE_SIZE-1, yVal);
+        CommonUtils.printLog("xList: "+xList.toString());
+        yList.add(SAMPLE_SIZE - 1, yVal);
         notifier.notifyObservers();
     }
 //    private class GraphPLotter implements Runnable {

@@ -129,9 +129,13 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
             mote.populateMotedata(element);
             String key = "Mote-"+Integer.toString(mote.getSensorId());
             motesMap.put(key,mote);
-            overlayItem = new OverlayItem(key, "string 2", mote.getLocation());
-            overlayItem.setMarker(moteIcon);
-            itemsArray.add(overlayItem);
+            String sensorKey = "Water_Sensor-"+Integer.toString(mote.getSensorId());
+            if (waterSensorsMap.containsKey(sensorKey) == false) {
+                overlayItem = new OverlayItem(key, "string 2", mote.getLocation());
+                overlayItem.setMarker(moteIcon);
+                itemsArray.add(overlayItem);
+            }
+
         }
 
         ItemizedOverlay<OverlayItem> mMyLocationOverlay;
@@ -152,14 +156,16 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
                     Motes motesObj = motesMap.get(item.getTitle());
                     Intent moteIntent = new Intent(getApplicationContext(), MoteProperties.class);
                     moteIntent.putExtra("moteObj",motesObj);
-                    Bundle bundle = new Bundle();
                     startActivity(moteIntent);
                 }
                 else if (str[0].equals("Water_Sensor")) {
                     WaterSensors sensor = waterSensorsMap.get(item.getTitle());
-                    Intent sensorIntent = new Intent(getApplicationContext(), SensorProperties.class);
-                    sensorIntent.putExtra("sensorObj",sensor);
-                    startActivity(sensorIntent);
+                    String moteid = "Mote-"+Integer.toString(sensor.getSensorId());
+                    Motes mote = motesMap.get(moteid);
+                    Intent intent= new Intent(getApplicationContext(), MoteOrSensor.class);
+                    intent.putExtra("sensorObj",sensor);
+                    intent.putExtra("moteObj",mote);
+                    startActivity(intent);
                 }
                 return true;
             }
