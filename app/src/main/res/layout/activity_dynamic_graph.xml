@@ -11,7 +11,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         androidplot.renderMode="use_background_thread"
-        androidPlot.title="A Dynamic XY Plot"
+        androidPlot.title="Water Level Plot"
         androidPlot.domainLabel="Domain"
         androidPlot.rangeLabel="Range"
         androidPlot.titleWidget.labelPaint.textSize="13sp"
