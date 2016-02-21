@@ -24,69 +24,22 @@ class SampleDynamicXYDatasource {
     List<Integer> yList = new ArrayList<>(Collections.nCopies(SAMPLE_SIZE, 0));
     List<Integer> xList = new ArrayList<Integer>(Collections.nCopies(SAMPLE_SIZE, 0));
     private MyObservable notifier;
-    private boolean keepRunning = false;
-    Thread plotterThread;
-    Random randomGenerator = new Random();
+//    private boolean keepRunning = false;
+//    Thread plotterThread;
     {
         notifier = new MyObservable();
     }
-    public void stopThread() {
-        keepRunning = false;
-    }
-
-//    @Override
-//    public void run() {
-//        try {
-//            keepRunning = true;
-//            int test = 0;
-//            while(keepRunning) {
-//                Thread.sleep(5000);
-//                CommonUtils.printLog("thread id in run = "+ Thread.currentThread().getId());
-//                int randomInt = randomGenerator.nextInt(100);
-//                test+=5;
-////                yList.remove(0);
-////                yList.add(29, randomInt);
-//                xList.remove(0);
-//                xList.add(29, test);
-//                notifier.notifyObservers();
-//            }
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
+//    public void stopThread() {
+//        keepRunning = false;
 //    }
 
 
-    public void startPlotting () {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    keepRunning = true;
-//                    int xVal = 0;
-//                    while(keepRunning) {
-//                        Thread.sleep(5000);
-//                        CommonUtils.printLog("thread id in run = "+ Thread.currentThread().getId());
-//                        int randomInt = randomGenerator.nextInt(100);
-//                        xVal+=5;
-//                        xList.remove(0);
-//                        xList.add(SAMPLE_SIZE-1, xVal);
-//                        notifier.notifyObservers();
-//                    }
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
-        GraphPLotter graphPLotter = new GraphPLotter();
-        plotterThread = new Thread(graphPLotter);
-        plotterThread.start();
 
-    }
-    public void stopPlotterThread() {
-    plotterThread.interrupt();
-        plotterThread = null;
-    }
+
+//    public void stopPlotterThread() {
+//    plotterThread.interrupt();
+//        plotterThread = null;
+//    }
     public int getItemCount(int series) {
         return SAMPLE_SIZE;
     }
@@ -110,27 +63,30 @@ class SampleDynamicXYDatasource {
         notifier.deleteObserver(observer);
     }
     public void updateXY(Integer xVal,Integer yVal) {
+        xList.remove(0);
+        xList.add(SAMPLE_SIZE-1,xVal);
         yList.remove(0);
         yList.add(SAMPLE_SIZE-1, yVal);
+        notifier.notifyObservers();
     }
-    private class GraphPLotter implements Runnable {
-        @Override
-        public void run() {
-            try {
-                keepRunning = true;
-                int xVal = 0;
-                while(keepRunning) {
-                    Thread.sleep(5000);
-//                    CommonUtils.printLog("thread id in run = "+ Thread.currentThread().getId());
-//                    int randomInt = randomGenerator.nextInt(100);
-                    xVal+=5;
-                    xList.remove(0);
-                    xList.add(SAMPLE_SIZE-1, xVal);
-                    notifier.notifyObservers();
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    private class GraphPLotter implements Runnable {
+//        @Override
+//        public void run() {
+//            try {
+//                keepRunning = true;
+//                int xVal = 0;
+//                while(keepRunning) {
+//                    Thread.sleep(5000);
+////                    CommonUtils.printLog("thread id in run = "+ Thread.currentThread().getId());
+////                    int randomInt = randomGenerator.nextInt(100);
+//                    xVal+=5;
+//                    xList.remove(0);
+//                    xList.add(SAMPLE_SIZE-1, xVal);
+//                    notifier.notifyObservers();
+//                }
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 }

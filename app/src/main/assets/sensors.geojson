@@ -33,5 +33,24 @@
             "WaterDataTopic":"iisc/smartx/sensor/water/moteid4",
             "TelemetryTopic":"iisc/smartx/network/telemetry/moteid4"
         }
-    }]
+    },
+    {
+            "geometry": {
+                "type": "Point",
+                "coordinates": [77.56583251,13.02292889]
+            },
+            "type": "Feature",
+            "id": 2,
+            "properties": {
+                "Source": "Sensor",
+                "Type": "Water",
+                "Id": 6,
+                "Description":"Water Level Sensor",
+                "URL":"http://smartx.cds.iisc.ac.in/water/rd6",
+    			"WaterDataTopic":"iisc/smartx/sensor/water/moteid6",
+    			"TelemetryTopic":"iisc/smartx/network/telemetry/moteid6"
+
+            }
+        }
+    ]
 }

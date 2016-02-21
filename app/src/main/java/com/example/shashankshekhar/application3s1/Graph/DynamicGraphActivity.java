@@ -123,7 +123,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
     public void onDestroy() {
         super.onDestroy();
         // kill the plotter thread
-        data.stopPlotterThread();
+//        data.stopPlotterThread();
     }
 
     private void setupDynamicPlot () {
@@ -143,7 +143,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
 
         // hook up the plotUpdater to the data model:
         data.addObserver(plotUpdater);
-        data.startPlotting();// starts a new thread
+//        data.startPlotting();// starts a new thread
         // thin out domain tick labels so they dont overlap each other:
         dynamicPlot.setDomainStepMode(XYStepMode.INCREMENT_BY_VAL);
         dynamicPlot.setDomainStepValue(5);

@@ -14,12 +14,13 @@ import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 import static com.example.shashankshekhar.application3s1.CommonUtilities.SmartWaterConstants.WATER_LEVEL_TOPIC_MOTE4;
 
 public class SensorProperties extends AppCompatActivity {
-
+    WaterSensors sensor = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_properties);
         WaterSensors sensor = (WaterSensors)getIntent().getSerializableExtra("sensorObj");
+        this.sensor = sensor;
         CommonUtils.printLog("mote id: " + sensor.getSensorId());
 
         TextView source = (TextView)findViewById(R.id.text_view7);
@@ -56,7 +57,7 @@ public class SensorProperties extends AppCompatActivity {
     }
     public void showGraph (View view){
         Intent graphIntent = new Intent(this, DynamicGraphActivity.class);
-        graphIntent.putExtra("topicName", WATER_LEVEL_TOPIC_MOTE4);
+        graphIntent.putExtra("topicName",sensor.getWaterDatatopic());
         startActivity(graphIntent);
     }
 }
