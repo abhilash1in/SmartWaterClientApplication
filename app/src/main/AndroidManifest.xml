@@ -15,8 +15,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-
+        android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".Map.MapActivity"
             android:screenOrientation="portrait"
@@ -43,7 +42,8 @@
 
         <activity
             android:name=".Graph.StaticGraphActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".Graph.Dashboard"
@@ -53,17 +53,17 @@
             android:name=".Graph.DynamicGraphActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Map.SensorProperties"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".Map.MoteProperties"
+        <activity
+            android:name=".Map.SensorProperties"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".NavigationDrawer.NavDrawer"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_nav_drawer"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".Map.MoteProperties"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".Map.Settings.SettingsActivity">
+        </activity>
+        <activity android:name=".Settings.SettingsActivity">
         </activity>
     </application>
 

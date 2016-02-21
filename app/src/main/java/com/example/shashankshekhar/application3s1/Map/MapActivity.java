@@ -2,7 +2,9 @@ package com.example.shashankshekhar.application3s1.Map;
 
 import android.app.Activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -20,11 +22,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 
+import com.example.shashankshekhar.application3s1.Camera.CameraActivity;
+import com.example.shashankshekhar.application3s1.Graph.Dashboard;
 import com.example.shashankshekhar.application3s1.ListView.ListViewActivity;
 import com.example.shashankshekhar.application3s1.R;
 
 import static com.example.shashankshekhar.application3s1.CommonUtilities.SmartWaterConstants.*;
 
+import com.example.shashankshekhar.application3s1.Settings.SettingsActivity;
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
 import com.google.gson.Gson;
@@ -65,6 +70,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
     ServiceAdapter serviceAdapter;
     HashMap<String,WaterSensors> waterSensorsMap;
     HashMap<String,Motes> motesMap;
+    SharedPreferences sharedpreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,22 +207,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        CommonUtils.printLog("map activity destroyed!");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        CommonUtils.printLog("on-pause in map activity called");
-    }
-    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -247,13 +238,19 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
+            Intent cameraIntent = new Intent(this, CameraActivity.class);
+            startActivity(cameraIntent);
 
         } else if (id == R.id.nav_map) {
             CommonUtils.printLog("map pressed");
+            Intent mapIntent = new Intent(this,MapActivity.class);
+            startActivity(mapIntent);
         } else if (id == R.id.nav_graph) {
-
+            Intent graphIntent = new Intent(this, Dashboard.class);
+            startActivity(graphIntent);
         } else if (id == R.id.nav_settings) {
-
+            Intent graphIntent = new Intent(this, SettingsActivity.class);
+            startActivity(graphIntent);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -322,6 +319,16 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
             // TODO Extract the data returned from the child Activity.
             String eventName = data.getStringExtra("eventName");
             serviceAdapter.publishGlobal(WATER_EVENTS_TOPIC, eventName, latitude + "-" + longitude);
+        }
+    }
+    private void updateSharedPreferences () {
+        sharedpreferences = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        CommonUtils.printLog("trying to update shared preference");
+        if (sharedpreferences.contains(PACKAGE_NAME) == false || sharedpreferences.getString(PACKAGE_NAME,"") == "") {
+            String packageName = getApplicationContext().getPackageName();
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(PACKAGE_NAME, packageName);
+            editor.commit();
         }
     }
 }
