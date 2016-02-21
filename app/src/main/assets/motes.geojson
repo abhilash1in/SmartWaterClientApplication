@@ -32,7 +32,7 @@
             "Id": 5,
             "Mote": "Relay",
 			"Platform": "WiSMote",
-			"Frequency": "2.4GHz"'
+			"Frequency": "2.4GHz",
 			"Channel": 20,
 			"URL":"http://smartx.cloudapp.net/water/rt5",
             "TelemetryTopic":"iisc/smartx/network/telemetry/moteid5"

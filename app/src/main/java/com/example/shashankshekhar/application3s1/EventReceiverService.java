@@ -19,7 +19,8 @@ import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 import static com.example.shashankshekhar.application3s1.CommonUtilities.SmartWaterConstants.*;
 public class EventReceiverService extends Service {
     EventReceiverInterface receiverInterface;
-
+    private String notificationTitle;
+    private String notificationText;
     public EventReceiverService() {}
 
     @Override
@@ -64,12 +65,13 @@ public class EventReceiverService extends Service {
 
                 String msg_content[]=message.toString().split("-");
                 if (msg_content.length == 3) {
+                    confiureNotificationText(msg_content[0]);
                     String lat  = msg_content[1];
                     String long1 = msg_content[2];
-                    createAndSendNotification("Water leakage","water leakage was detected",lat,long1);
+                    createAndSendNotification(notificationTitle,notificationText,lat,long1);
                 }
                 else {
-                    createAndSendNotification("Water leakage","water leakage was detected",null,null);
+                    createAndSendNotification(notificationTitle,notificationText,null,null);
                 }
             }
 
@@ -77,6 +79,21 @@ public class EventReceiverService extends Service {
         }
 
     };
+    private void confiureNotificationText (String eventName) {
+
+        if (eventName.equals(WATER_CONTAMINATION_EVENT_NAME)) {
+            notificationTitle = WATER_CONTAMINATION_EVENT_NAME;
+        } else if (eventName.equals(WATER_LEAKAGE_EVENT_NAME)) {
+            notificationTitle = WATER_LEAKAGE_EVENT_NAME;
+        } else if (eventName.equals(WATER_MAINTENANCE_EVENT_NAME)) {
+            notificationTitle = WATER_MAINTENANCE_EVENT_NAME;
+        } else if (eventName.equals(WATER_OVERFLOW_EVENT_NAME)) {
+            notificationTitle = WATER_OVERFLOW_EVENT_NAME;
+        } else {
+            notificationTitle = WATER_EVENT_GENERIC;
+        }
+        notificationText = notificationTitle.toLowerCase() + " was detected ";
+    }
 
     public void createAndSendNotification (String contentTitle, String contentText,String lat,String long1) {
         NotificationCompat.Builder builder =

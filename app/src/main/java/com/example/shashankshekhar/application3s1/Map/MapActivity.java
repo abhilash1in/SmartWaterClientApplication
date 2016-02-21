@@ -39,6 +39,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.compass.CompassOverlay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,6 +77,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         if (lat != null && long1 != null) {
             GeoPoint tappedLocation = new GeoPoint(Double.parseDouble(lat), Double.parseDouble(long1));
             addMarkerAtLocation(tappedLocation);
+            myMapController.setCenter(tappedLocation);
         }
 
     }
@@ -257,7 +259,14 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_EVENT_NAME && data != null) {
             // TODO Extract the data returned from the child Activity.
             String eventName = data.getStringExtra("eventName");
-            serviceAdapter.publishGlobal(WATER_EVENTS_TOPIC, eventName, latitude + "-" + longitude);
+            String dataString;
+            String description = data.getStringExtra("Description");
+            if (description==null || description.isEmpty()==true) {
+                dataString = latitude + "-" + longitude;
+            } else {
+                dataString = latitude + "-" + longitude + "-" + description;
+            }
+            serviceAdapter.publishGlobal(WATER_EVENTS_TOPIC, eventName, dataString);
         }
     }
 }
