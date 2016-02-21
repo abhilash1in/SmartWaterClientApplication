@@ -142,7 +142,7 @@ public class DynamicMoteGraph extends Activity {
 
     }
     private void setupDynamicPlot () {
-        dynamicPlot = (XYPlot) findViewById(R.id.dynamicXYPlot);
+        dynamicPlot = (XYPlot) findViewById(R.id.dynamicXYPlot1);
 
         plotUpdater = new MyPlotUpdater(dynamicPlot);
 
@@ -151,10 +151,10 @@ public class DynamicMoteGraph extends Activity {
 
         // getInstance and position datasets:
         data = new SampleDynamicMoteDataSource();
-        SampleDynamicSeries frameDroppedSeries = new SampleDynamicSeries(data, 0, "Frame Dropped");
-        SampleDynamicSeries expectedTransmissionSeries = new SampleDynamicSeries(data, 1, "Expected Transmission");
-        SampleDynamicSeries cumulativeFrSeries = new SampleDynamicSeries(data, 2, "Cumulative Frame");
-        SampleDynamicSeries batteryVolSeries = new SampleDynamicSeries(data, 3, "Battery Voltage");
+        SampleDynamicSeries frameDroppedSeries = new SampleDynamicSeries(data, 0, "FrDropped");
+        SampleDynamicSeries expectedTransmissionSeries = new SampleDynamicSeries(data, 1, "ExpTrans");
+        SampleDynamicSeries cumulativeFrSeries = new SampleDynamicSeries(data, 2, "CumulFrame");
+        SampleDynamicSeries batteryVolSeries = new SampleDynamicSeries(data, 3, "BattVol");
 
         LineAndPointFormatter formatter1 = new LineAndPointFormatter(
                 Color.rgb(0, 0, 0), null, null, null);
@@ -188,7 +188,7 @@ public class DynamicMoteGraph extends Activity {
 
         // thin out domain tick labels so they dont overlap each other:
         dynamicPlot.setDomainStepMode(XYStepMode.INCREMENT_BY_VAL);
-        dynamicPlot.setDomainStepValue(5);
+        dynamicPlot.setDomainStepValue(10);
 
         dynamicPlot.setRangeStepMode(XYStepMode.INCREMENT_BY_VAL);
         dynamicPlot.setRangeStepValue(500);
@@ -198,6 +198,7 @@ public class DynamicMoteGraph extends Activity {
 
         // uncomment this line to freeze the range boundaries:
         dynamicPlot.setRangeBoundaries(0, 5000, BoundaryMode.AUTO);
+
 
 
         // create a dash effect for domain and range grid lines:

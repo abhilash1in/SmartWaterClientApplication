@@ -133,7 +133,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
         dynamicPlot.getGraphWidget().setDomainValueFormat(new DecimalFormat("0"));
         data = new SampleDynamicXYDatasource();
 
-        SampleDynamicSeries sine1Series = new SampleDynamicSeries(data, 0, "Plot 1");
+        SampleDynamicSeries sine1Series = new SampleDynamicSeries(data, 0,"Water Level");
         LineAndPointFormatter formatter1 = new LineAndPointFormatter(
                 Color.rgb(0, 0, 0), null, null, null);
         formatter1.getLinePaint().setStrokeJoin(Paint.Join.ROUND);
@@ -146,7 +146,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
 //        data.startPlotting();// starts a new thread
         // thin out domain tick labels so they dont overlap each other:
         dynamicPlot.setDomainStepMode(XYStepMode.INCREMENT_BY_VAL);
-        dynamicPlot.setDomainStepValue(5);
+        dynamicPlot.setDomainStepValue(10);
 
         dynamicPlot.setRangeStepMode(XYStepMode.INCREMENT_BY_VAL);
         dynamicPlot.setRangeStepValue(1);
@@ -154,7 +154,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
         dynamicPlot.setRangeValueFormat(new DecimalFormat("###.#"));
 
         // uncomment this line to freeze the range boundaries:
-        dynamicPlot.setRangeBoundaries(0, 10, BoundaryMode.FIXED);
+        dynamicPlot.setRangeBoundaries(0, 10, BoundaryMode.AUTO);
 
         // create a dash effect for domain and range grid lines:
         DashPathEffect dashFx = new DashPathEffect(
