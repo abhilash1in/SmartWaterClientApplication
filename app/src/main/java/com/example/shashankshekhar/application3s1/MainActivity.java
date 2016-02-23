@@ -31,12 +31,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void bindService (View view) {
-        serviceAdapter.bindToService();
+        if (serviceAdapter.serviceConnected() == false) {
+            serviceAdapter.bindToService();
+            return;
+        }
+        CommonUtils.showToast(this,"Service connected");
 
     }
 
     public void unbindService (View view) {
-        serviceAdapter.unbindFromService();
+        if (serviceAdapter.serviceConnected()== true) {
+            serviceAdapter.unbindFromService();
+            return;
+        }
+        CommonUtils.showToast(this,"Service not connected");
+
     }
     @Override
     protected void onDestroy() {
@@ -61,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     public void loadMap (View view) {
         // code to load the map goes here
         if (serviceAdapter.serviceConnected() == false) {
-            CommonUtils.printLog("service not connected... returning");
+            CommonUtils.showToast(getApplicationContext(), "Plese bind to service");
             return;
         }
         Intent mapIntent = new Intent(this,MapActivity.class);
@@ -69,19 +78,14 @@ public class MainActivity extends AppCompatActivity {
     }
     public void openCamera (View view) {
         // code to load camera goes here
-        if (serviceAdapter.serviceConnected() == false) {
-        CommonUtils.printLog("service not connected... returning");
-        return;
-    }
+//        if (serviceAdapter.serviceConnected() == false) {
+//        CommonUtils.printLog("service not connected... returning");
+//        return;
+//    }
         Intent cameraIntent = new Intent(this, CameraActivity.class);
         startActivity(cameraIntent);
     }
     public void openGraph (View view) {
-        // code to load camera goes here
-//        if (ServiceAdapter.serviceConnected() == false) {
-//            CommonUtils.printLog("service not connected... returning");
-//            return;
-//        }
         Intent graphIntent = new Intent(this, Dashboard.class);
         startActivity(graphIntent);
     }

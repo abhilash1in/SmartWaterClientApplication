@@ -35,11 +35,9 @@ public class Dashboard extends AppCompatActivity {
         dropDown2.setAdapter(adapter);
     }
     public void loadStaticGraph (View view) {
-//        Intent graphIntent = new Intent(this, StaticGraphActivity.class);
-//        startActivity(graphIntent);
-        Intent graphIntent = new Intent(this, DynamicMoteGraph.class);
-        graphIntent.putExtra("topicName", "iisc/smartx/network/telemetry/moteid7");
+        Intent graphIntent = new Intent(this, StaticGraphActivity.class);
         startActivity(graphIntent);
+
     }
 
     public void loadDynamicGraph (View view) {

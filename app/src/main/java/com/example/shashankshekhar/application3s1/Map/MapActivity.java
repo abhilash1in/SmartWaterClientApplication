@@ -39,7 +39,6 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.views.overlay.compass.CompassOverlay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -127,9 +126,9 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         for (JsonElement element : features) {
             Motes mote = new Motes();
             mote.populateMotedata(element);
-            String key = "Mote-"+Integer.toString(mote.getSensorId());
+            String key = "Mote-"+Integer.toString(mote.getMoteId());
             motesMap.put(key,mote);
-            String sensorKey = "Water_Sensor-"+Integer.toString(mote.getSensorId());
+            String sensorKey = "Water_Sensor-"+Integer.toString(mote.getMoteId());
             if (waterSensorsMap.containsKey(sensorKey) == false) {
                 overlayItem = new OverlayItem(key, "string 2", mote.getLocation());
                 overlayItem.setMarker(moteIcon);
@@ -183,7 +182,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
     private void setupLocationManager() {
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 //        GeoPoint iisc = new GeoPoint(13.03, 77.561514);
-        GeoPoint iisc = new GeoPoint(13.0224926, 77.56563762);
+        GeoPoint iisc = new GeoPoint(13.02292889, 77.56583251);
+        // 77.56583251,13.02292889
         myMapController.setCenter(iisc);
     }
 
@@ -222,7 +222,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
     @Override
     public void onLocationChanged(Location location) {
         GeoPoint currentLocation = new GeoPoint(location);
-        myMapController.setCenter(currentLocation);
+//        myMapController.setCenter(currentLocation);
 //        addMarker(currLoc, "Changed location");
         addMarkerAtLocation(currentLocation);
         CommonUtils.printLog("lat =  " + Double.toString(currentLocation.getLatitude()) + " long = " + Double.toString(currentLocation.getLongitude()));

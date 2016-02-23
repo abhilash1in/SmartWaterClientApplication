@@ -7,7 +7,6 @@ import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.shashankshekhar.application3s1.Graph.DynamicGraphActivity;
 import com.example.shashankshekhar.application3s1.Graph.DynamicMoteGraph;
 import com.example.shashankshekhar.application3s1.R;
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
@@ -19,7 +18,7 @@ public class MoteProperties extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mote_properties);
         mote = (Motes)getIntent().getSerializableExtra("moteObj");
-        CommonUtils.printLog("mote id: " + mote.getSensorId());
+        CommonUtils.printLog("mote id: " + mote.getMoteId());
 
         TextView source = (TextView)findViewById(R.id.text_view8);
         String sourceString = "<b>Source:</b> " + mote.getSource();
@@ -30,7 +29,7 @@ public class MoteProperties extends AppCompatActivity {
         type.setText(Html.fromHtml(sourceString));
 
         TextView sensorId = (TextView)findViewById(R.id.text_view1);
-        sourceString = "<b>Mote Id:</b> " + Integer.toString(mote.getSensorId());
+        sourceString = "<b>Mote Id:</b> " + Integer.toString(mote.getMoteId());
         sensorId.setText(Html.fromHtml(sourceString));
 
         TextView geoLocation = (TextView)findViewById(R.id.text_view2);
@@ -61,6 +60,7 @@ public class MoteProperties extends AppCompatActivity {
     public void showGraph (View view){
         Intent graphIntent = new Intent(this, DynamicMoteGraph.class);
         graphIntent.putExtra("topicName",mote.getTopic());
+        graphIntent.putExtra("moteId",mote.getMoteId());
         startActivity(graphIntent);
     }
 }

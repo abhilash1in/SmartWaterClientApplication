@@ -1,6 +1,5 @@
 package com.example.shashankshekhar.application3s1.Graph;
 
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,15 +19,15 @@ public class SampleDynamicMoteDataSource {
             super.notifyObservers();
         }
     }
-    public static final int FR_DROPPED = 0;
+    public static final int FR_DROPPED_RATE = 0;
     public static final int EXP_TRANS = 1;
-    public static final int CUM_FR = 2;
+    public static final int FR_SENT_RATE = 2;
     public static final int BAT_VOL = 3;
     private static final int SAMPLE_SIZE = 3;
     private MyObservable notifier;
-    List<Integer> frameDropped = new ArrayList<>(Collections.nCopies(SAMPLE_SIZE, 0));
+    List<Integer> frameDroppedRate = new ArrayList<>(Collections.nCopies(SAMPLE_SIZE, 0));
     List<Integer> expectedTransmission = new ArrayList<>(Collections.nCopies(SAMPLE_SIZE, 0));
-    List<Integer> cumulativeFrame = new ArrayList<>(Collections.nCopies(SAMPLE_SIZE, 0));
+    List<Integer> frameSentRate = new ArrayList<>(Collections.nCopies(SAMPLE_SIZE, 0));
     List<Integer> batteryVol = new ArrayList<>(Collections.nCopies(SAMPLE_SIZE, 0));
     List<Integer> timeList = new ArrayList<Integer>(Collections.nCopies(SAMPLE_SIZE, 0));
 
@@ -53,12 +52,12 @@ public class SampleDynamicMoteDataSource {
         }
 
         switch (series) {
-            case FR_DROPPED:
-                return frameDropped.get(index);
+            case FR_DROPPED_RATE:
+                return frameDroppedRate.get(index);
             case EXP_TRANS:
                 return expectedTransmission.get(index);
-            case CUM_FR:
-                return cumulativeFrame.get(index);
+            case FR_SENT_RATE:
+                return frameSentRate.get(index);
             case BAT_VOL:
                 return batteryVol.get(index);
             default:
@@ -76,15 +75,15 @@ public class SampleDynamicMoteDataSource {
 
     public void updateLists(int time,int frDropped,int expTrans,int cumFr,int batVol) {
         timeList.remove(0);
-        frameDropped.remove(0);
+        frameDroppedRate.remove(0);
         expectedTransmission.remove(0);
-        cumulativeFrame.remove(0);
+        frameSentRate.remove(0);
         batteryVol.remove(0);
         //add values
         timeList.add(SAMPLE_SIZE-1,time);
-        frameDropped.add(SAMPLE_SIZE-1,frDropped);
+        frameDroppedRate.add(SAMPLE_SIZE - 1, frDropped);
         expectedTransmission.add(SAMPLE_SIZE - 1, expTrans);
-        cumulativeFrame.add(SAMPLE_SIZE - 1, cumFr);
+        frameSentRate.add(SAMPLE_SIZE - 1, cumFr);
         batteryVol.add(SAMPLE_SIZE-1, batVol);
         notifier.notifyObservers();
 

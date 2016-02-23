@@ -44,11 +44,11 @@ public class DynamicMoteGraph extends Activity {
     private String topicName;
     boolean resetTimeStamp = true;
     Integer initalTimeStamp;
+    String plotTitle;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Integer timeStamp ;
-            Integer waterLevel;
             String messageString = intent.getStringExtra("message");
             // break it based on comma and first is timeStamp, second
             String[] strArray = messageString.split(",");
@@ -57,16 +57,22 @@ public class DynamicMoteGraph extends Activity {
             }
             timeStamp = Integer.parseInt(strArray[0]);
             String batteryVoltage = (strArray[2].split(":"))[1];
-            String cumFrame = (strArray[3].split(":"))[1];
+            String frameSentRate = (strArray[3].split(":"))[1];
             String expTransmission = (strArray[4].split(":"))[1];
-            String frameDropped = (strArray[5].split(":"))[1];
-            CommonUtils.printLog(batteryVoltage+"-"+cumFrame+"-"+expTransmission+"-"+frameDropped);
+            String frameDroppedRate = (strArray[5].split(":"))[1];
+            CommonUtils.printLog("vol: "+batteryVoltage+
+                    "frame send rate:" +frameSentRate+
+                    "Exp Trans: "+expTransmission+
+                    "Fr dropped rate: "+frameDroppedRate);
             if (resetTimeStamp == true) {
                 initalTimeStamp = timeStamp;
                 resetTimeStamp = false;
             }
-            data.updateLists((timeStamp - initalTimeStamp), Integer.parseInt(frameDropped),Integer.parseInt
-                    (expTransmission),  Integer.parseInt(cumFrame),Integer.parseInt(batteryVoltage));
+            data.updateLists((timeStamp - initalTimeStamp),
+                    (int) Float.parseFloat(frameDroppedRate),
+                    (int) Float.parseFloat(expTransmission),
+                    (int) Float.parseFloat(frameSentRate),
+                    (int) Float.parseFloat(batteryVoltage));
         }
     };
 
@@ -77,12 +83,18 @@ public class DynamicMoteGraph extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dynamic_mote_graph);
         serviceAdapter = ServiceAdapter.getServiceAdapterinstance(getApplicationContext());
-        CommonUtils.printLog("onCreateCalled, DynamicGraphActivity");
-        setupDynamicPlot();
         topicName = getIntent().getStringExtra("topicName");
+        int moteId = getIntent().getIntExtra("moteId",-1);
+        if (moteId == -1) {
+            plotTitle = "Mote Plot";
+        } else {
+            plotTitle = "Plot for Mote "+ Integer.toString(moteId);
+        }
+
         if (topicName != null) {
             setupBroadcastReceiver();
         }
+        setupDynamicPlot();
         // get handles to our View defined in layout.xml:
 
     }
@@ -148,12 +160,12 @@ public class DynamicMoteGraph extends Activity {
 
         // only display whole numbers in domain labels
         dynamicPlot.getGraphWidget().setDomainValueFormat(new DecimalFormat("0"));
-
+        dynamicPlot.setTitle(plotTitle);
         // getInstance and position datasets:
         data = new SampleDynamicMoteDataSource();
         SampleDynamicSeries frameDroppedSeries = new SampleDynamicSeries(data, 0, "FD");
         SampleDynamicSeries expectedTransmissionSeries = new SampleDynamicSeries(data, 1, "ET");
-        SampleDynamicSeries cumulativeFrSeries = new SampleDynamicSeries(data, 2, "CF");
+        SampleDynamicSeries frSentSeries = new SampleDynamicSeries(data, 2, "CF");
         SampleDynamicSeries batteryVolSeries = new SampleDynamicSeries(data, 3, "BV");
 
         LineAndPointFormatter formatter1 = new LineAndPointFormatter(
@@ -167,7 +179,7 @@ public class DynamicMoteGraph extends Activity {
                 new LineAndPointFormatter(Color.rgb(0, 0, 200), null, null, null);
         formatter2.getLinePaint().setStrokeWidth(10);
         formatter2.getLinePaint().setStrokeJoin(Paint.Join.ROUND);
-        dynamicPlot.addSeries(cumulativeFrSeries,
+        dynamicPlot.addSeries(frSentSeries,
                 formatter2);
 
         LineAndPointFormatter formatter3 =
@@ -191,13 +203,13 @@ public class DynamicMoteGraph extends Activity {
         dynamicPlot.setDomainStepValue(40);
 
         dynamicPlot.setRangeStepMode(XYStepMode.INCREMENT_BY_VAL);
-        dynamicPlot.setRangeStepValue(500);
+        dynamicPlot.setRangeStepValue(100);
 //        dynamicPlot.range
 
         dynamicPlot.setRangeValueFormat(new DecimalFormat("###.#"));
 
         // uncomment this line to freeze the range boundaries:
-        dynamicPlot.setRangeBoundaries(0, 5000, BoundaryMode.AUTO);
+        dynamicPlot.setRangeBoundaries(0, 1000, BoundaryMode.GROW);
 
         // create a dash effect for domain and range grid lines:
         DashPathEffect dashFx = new DashPathEffect(

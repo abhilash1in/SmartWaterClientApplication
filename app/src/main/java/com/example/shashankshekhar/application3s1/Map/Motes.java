@@ -23,7 +23,7 @@ public class Motes implements Serializable {
     private String type;
     private String topic;
     private GeoPoint location;
-    private int sensorId;
+    private int moteId;
     private String platform;
     private String frequency;
     private int channel;
@@ -49,8 +49,8 @@ public class Motes implements Serializable {
     public GeoPoint getLocation () {
         return location;
     }
-    public int getSensorId () {
-        return sensorId;
+    public int getMoteId() {
+        return moteId;
     }
     public String getTopic() {
         return topic;
@@ -81,7 +81,7 @@ public class Motes implements Serializable {
 
         type = propertiesObject.getAsJsonPrimitive("Type").getAsString();
 
-        sensorId = propertiesObject.getAsJsonPrimitive("Id").getAsInt();
+        moteId = propertiesObject.getAsJsonPrimitive("Id").getAsInt();
 
         webPageUrlString = propertiesObject.getAsJsonPrimitive("URL").getAsString();
 

@@ -154,7 +154,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
         dynamicPlot.setRangeValueFormat(new DecimalFormat("###.#"));
 
         // uncomment this line to freeze the range boundaries:
-        dynamicPlot.setRangeBoundaries(0, 10, BoundaryMode.AUTO);
+        dynamicPlot.setRangeBoundaries(0, 10, BoundaryMode.GROW);
 
         // create a dash effect for domain and range grid lines:
         DashPathEffect dashFx = new DashPathEffect(

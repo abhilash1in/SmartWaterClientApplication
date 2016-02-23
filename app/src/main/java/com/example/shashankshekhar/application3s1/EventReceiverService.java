@@ -64,8 +64,8 @@ public class EventReceiverService extends Service {
                 CommonUtils.printLog("broadcast received in client");
 
                 String msg_content[]=message.toString().split("-");
-                if (msg_content.length == 3) {
-                    confiureNotificationText(msg_content[0]);
+                confiureNotificationText(msg_content[0]);
+                if (msg_content.length == 3 || msg_content.length == 4 ) {
                     String lat  = msg_content[1];
                     String long1 = msg_content[2];
                     createAndSendNotification(notificationTitle,notificationText,lat,long1);

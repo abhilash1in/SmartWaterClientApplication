@@ -19,7 +19,7 @@ public class SensorProperties extends AppCompatActivity {
         setContentView(R.layout.activity_sensor_properties);
         WaterSensors sensor = (WaterSensors)getIntent().getSerializableExtra("sensorObj");
         this.sensor = sensor;
-//        CommonUtils.printLog("mote id: " + sensor.getSensorId());
+//        CommonUtils.printLog("mote id: " + sensor.getMoteId());
 
         TextView source = (TextView)findViewById(R.id.text_view7);
         String sourceString = "<b>Source:</b> " + sensor.getSource();
@@ -52,6 +52,7 @@ public class SensorProperties extends AppCompatActivity {
     public void showGraph (View view){
         Intent graphIntent = new Intent(this, DynamicGraphActivity.class);
         graphIntent.putExtra("topicName",sensor.getTopic());
+        graphIntent.putExtra("sensorId",sensor.getSensorId());
         startActivity(graphIntent);
     }
 }

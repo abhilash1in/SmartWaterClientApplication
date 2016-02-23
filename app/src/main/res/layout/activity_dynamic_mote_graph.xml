@@ -12,7 +12,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         androidplot.renderMode="use_background_thread"
-        ap:label="Telemetry Plot"
         ap:domainLabel="Time (in S)"
         ap:rangeLabel="Range"
         androidPlot.titleWidget.labelPaint.textSize="13sp"

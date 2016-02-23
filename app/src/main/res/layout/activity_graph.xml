@@ -11,7 +11,7 @@
         android:id="@+id/plot"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        ap:label="Static XY Plot"
+        ap:label="Sample XY Plot"
         ap:rangeLabel="range"
         ap:domainLabel="domain"
         ap:borderColor="#000000"
