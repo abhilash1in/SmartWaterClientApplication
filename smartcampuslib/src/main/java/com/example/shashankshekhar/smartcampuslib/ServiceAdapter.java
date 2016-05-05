@@ -9,30 +9,33 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+
 import static com.example.shashankshekhar.smartcampuslib.SmartXLibConstants.*;
+
 import android.os.RemoteException;
+
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
+import com.example.shashankshekhar.smartcampuslib.Interfaces.EventCallBack;
+
+import java.io.BufferedReader;
 
 public class ServiceAdapter {
+    // static vars. not object dependents
     static Messenger messenger = null;
-    static ServiceAdapter serviceAdapterinstance ;
-    Messenger receiverMessenger;
+    static Messenger receiverMessenger;
     static boolean bound = false;
+
     Context callerContext = null;
+    EventCallBack eventCallBack;
     // TODO: 14/02/16  initialise it separately and send a call to BGS to update its storage
-    String applicationId = null; 
-    private ServiceAdapter (Context context) {
+    String applicationId = null;
+
+    public ServiceAdapter(Context context, EventCallBack callBack) {
         callerContext = context;
-    }
-    public static ServiceAdapter getServiceAdapterinstance (Context context) {
-        if (serviceAdapterinstance != null) {
-            return serviceAdapterinstance;
-        }
-        serviceAdapterinstance = new ServiceAdapter(context);
-        return serviceAdapterinstance;
+        eventCallBack = callBack;
     }
 
-    public void bindToService () {
+    public void bindToService() {
         if (serviceConnected() == true) {
             CommonUtils.showToast(callerContext, "Service already connected");
             return;
@@ -48,7 +51,7 @@ public class ServiceAdapter {
 
     public void unbindFromService() {
         if (serviceConnected() == false) {
-            CommonUtils.showToast(callerContext,"Already Disconnected");
+            CommonUtils.showToast(callerContext, "Already Disconnected");
         }
         callerContext.unbindService(serviceConnection);
         bound = false;
@@ -56,19 +59,19 @@ public class ServiceAdapter {
     }
 
     public Boolean serviceConnected() {
-        if (messenger==null || bound == false) {
+        if (messenger == null || bound == false) {
             return false;
         }
         return true;
     }
 
-    public void publishGlobal (String topicName,String eventName,String dataString) {
+    public void publishGlobal(String topicName, String eventName, String dataString) {
         if (checkConnectivity() == false) {
             return;
         }
-        Message messageToPublish = Message.obtain(null,PUBLISH_MESSAGE);
+        Message messageToPublish = Message.obtain(null, PUBLISH_MESSAGE);
         Bundle bundleToPublish = new Bundle();
-        bundleToPublish.putString("topicName",topicName);
+        bundleToPublish.putString("topicName", topicName);
         bundleToPublish.putString("eventName", eventName);
         bundleToPublish.putString("dataString", dataString);
         messageToPublish.setData(bundleToPublish);
@@ -82,65 +85,68 @@ public class ServiceAdapter {
 
     }
 
-    public String subscribeToTopic (String topicName) {
+    public String subscribeToTopic(String topicName) {
         // TODO: 12/11/15 this should return a subscribe id to the caller hence the String return type
         if (checkConnectivity() == false) {
             return null;
         }
         CommonUtils.printLog("call to subscribe made from application");
-        Message messageToSubscribe = Message.obtain(null,SUBSCRIBE_TO_TOPIC);
+        Message messageToSubscribe = Message.obtain(null, SUBSCRIBE_TO_TOPIC);
         Bundle bundle = new Bundle();
         bundle.putString("topicName", topicName);
         messageToSubscribe.setData(bundle);
         messageToSubscribe.replyTo = receiverMessenger;
         try {
             messenger.send(messageToSubscribe);
-        }  catch (RemoteException e) {
+        } catch (RemoteException e) {
             e.printStackTrace();
             CommonUtils.printLog("exception while trying to subscribe");
         }
         return null;
     }
-    public void unsubscribeFromTopic (String topicName) {
+
+    public void unsubscribeFromTopic(String topicName) {
         if (checkConnectivity() == false) {
             return;
         }
-        Message unsubscribe = Message.obtain(null,UNSUBSCRIBE_TO_TOPIC);
+        Message unsubscribe = Message.obtain(null, UNSUBSCRIBE_TO_TOPIC);
         Bundle bundle = new Bundle();
         bundle.putString("topicName", topicName);
         unsubscribe.setData(bundle);
-        unsubscribe.replyTo= receiverMessenger;
+        unsubscribe.replyTo = receiverMessenger;
         try {
             messenger.send(unsubscribe);
-        }  catch (RemoteException e) {
+        } catch (RemoteException e) {
             e.printStackTrace();
             CommonUtils.printLog("exception while sending message for unsubscribe");
         }
     }
+
     private Boolean checkConnectivity() {
         if (serviceConnected() == false) {
             CommonUtils.printLog("service not connected with client app ..returning");
             if (callerContext != null) {
-                CommonUtils.showToast(callerContext,"Service is not connected");
+                CommonUtils.showToast(callerContext, "Service is not connected");
             }
             return false;
         }
         if (CommonUtils.isNetworkAvailable(callerContext) == false) {
             CommonUtils.printLog("network not available..returning");
             if (callerContext != null) {
-                CommonUtils.showToast(callerContext,"No Network");
+                CommonUtils.showToast(callerContext, "No Network");
             }
             return false;
         }
         return true;
     }
+
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             messenger = new Messenger(service);
             bound = true;
             CommonUtils.printLog("both flag are set");
-            CommonUtils.showToast(callerContext,"Connected to Service");
+            CommonUtils.showToast(callerContext, "Connected to Service");
         }
 
         @Override
@@ -148,27 +154,33 @@ public class ServiceAdapter {
             bound = false;
             messenger = null;
             CommonUtils.printLog("service disconnected from water app");
-            CommonUtils.showToast(callerContext,"Service Disconnected");
+            CommonUtils.showToast(callerContext, "Service Disconnected");
         }
     };
 }
-
 class IncomingHandler extends Handler {
-    static final int MQTT_CONNECTED =1;
-    static final int UNABLE_TO_CONNECT =2;
-    static final int NO_NETWORK_AVAILABLE =4;
+    static final int MQTT_CONNECTED = 1;
+    static final int UNABLE_TO_CONNECT = 2;
+    static final int NO_NETWORK_AVAILABLE = 4;
     static final int MQTT_CONNECTION_IN_PROGRESS = 5;
     static final int MQTT_NOT_CONNECTED = 6;
 
+    // publish
     static final int TOPIC_PUBLISHED = 7;
     static final int ERROR_IN_PUBLISHING = 8;
 
+    // subscribing
+    static final int TOPIC_SUBSCRIBED = 9;
+    static final int ERROR_IN_SUBSCRIBING = 10;
+
     Context applicationContext;
+
     IncomingHandler(Context context) {
         this.applicationContext = context;
     }
+
     @Override
-    public void handleMessage (Message message) {
+    public void handleMessage(Message message) {
         switch (message.what) {
             case MQTT_CONNECTED://
                 CommonUtils.printLog("mqtt connected");
@@ -176,22 +188,28 @@ class IncomingHandler extends Handler {
                 break;
             case UNABLE_TO_CONNECT:
                 CommonUtils.printLog("unable to connect");
-                CommonUtils.showToast(applicationContext,"could not connect");
+                CommonUtils.showToast(applicationContext, "could not connect");
                 break;
             case NO_NETWORK_AVAILABLE:
-                CommonUtils.showToast(applicationContext,"No Network!!");
+                CommonUtils.showToast(applicationContext, "No Network!!");
                 break;
             case MQTT_CONNECTION_IN_PROGRESS:
-                CommonUtils.showToast(applicationContext,"Connection in progress!!");
+                CommonUtils.showToast(applicationContext, "Connection in progress!!");
                 break;
             case MQTT_NOT_CONNECTED:
-                CommonUtils.showToast(applicationContext,"Mqtt is not connected");
+                CommonUtils.showToast(applicationContext, "Mqtt is not connected");
                 break;
             case TOPIC_PUBLISHED:
-                CommonUtils.showToast(applicationContext,"Topic Published");
+                CommonUtils.showToast(applicationContext, "Topic Published");
                 break;
             case ERROR_IN_PUBLISHING:
-                CommonUtils.showToast(applicationContext,"Error in publishing");
+                CommonUtils.showToast(applicationContext, "Error in publishing");
+                break;
+            case TOPIC_SUBSCRIBED:
+                CommonUtils.showToast(applicationContext, "Topic Subscribed");
+                break;
+            case ERROR_IN_SUBSCRIBING:
+                CommonUtils.showToast(applicationContext, "Error in subscribing");
                 break;
             default:
 

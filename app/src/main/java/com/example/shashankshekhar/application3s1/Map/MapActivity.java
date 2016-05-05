@@ -64,7 +64,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        serviceAdapter = ServiceAdapter.getServiceAdapterinstance(getApplicationContext());
+        serviceAdapter = new ServiceAdapter(getApplicationContext());
         setupMapView();
         setupLocationManager();
         addAdditionalLayer();

@@ -82,7 +82,7 @@ public class DynamicMoteGraph extends Activity {
         // android boilerplate stuff
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dynamic_mote_graph);
-        serviceAdapter = ServiceAdapter.getServiceAdapterinstance(getApplicationContext());
+        serviceAdapter = new ServiceAdapter(getApplicationContext());
         topicName = getIntent().getStringExtra("topicName");
         int moteId = getIntent().getIntExtra("moteId",-1);
         if (moteId == -1) {

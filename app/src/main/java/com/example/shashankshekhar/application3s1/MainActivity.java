@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         // start the receiver service
         // TODO: 02/02/16 generate the app id here and put in a persistent storage
         updateSharedPreferences();
-        serviceAdapter = ServiceAdapter.getServiceAdapterinstance(getApplicationContext());
+        serviceAdapter = new  ServiceAdapter(getApplicationContext());
         startService(new Intent(this, EventReceiverService.class));
     }
 

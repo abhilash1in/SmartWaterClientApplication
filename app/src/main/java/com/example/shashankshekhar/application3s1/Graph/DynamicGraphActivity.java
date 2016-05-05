@@ -77,7 +77,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dynamic_graph);
-        serviceAdapter = ServiceAdapter.getServiceAdapterinstance(getApplicationContext());
+        serviceAdapter = new ServiceAdapter(getApplicationContext());
         CommonUtils.printLog("onCreateCalled, DynamicGraphActivity");
         setupDynamicPlot();
         topicName = getIntent().getStringExtra("topicName");
