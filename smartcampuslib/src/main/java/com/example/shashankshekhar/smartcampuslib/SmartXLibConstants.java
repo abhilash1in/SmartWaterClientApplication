@@ -17,3 +17,8 @@ public final class SmartXLibConstants {
     public static  final int UNSUBSCRIBE_TO_TOPIC = 5;
 
 }
+/*
+work of library
+1. init the reply messenger
+2. parse the callback for ex message published, subscribed unsubscribed ,
+ */
