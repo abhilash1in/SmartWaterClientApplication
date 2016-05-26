@@ -10,7 +10,7 @@ import com.example.shashankshekhar.smartcampuslib.Interfaces.ServiceCallback;
 /**
  * Created by shashankshekhar on 05/05/16.
  */
-class IncomingHandler extends Handler {
+public class IncomingHandler extends Handler {
 //    static final int MQTT_CONNECTED = 1;
 //    static final int UNABLE_TO_CONNECT = 2;
 //    static final int NO_NETWORK_AVAILABLE = 4;

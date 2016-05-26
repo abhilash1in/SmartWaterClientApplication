@@ -8,19 +8,23 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Messenger;
+
 import com.androidplot.Plot;
 import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.XYSeries;
 import com.androidplot.xy.*;
 import com.example.shashankshekhar.application3s1.R;
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
+import com.example.shashankshekhar.smartcampuslib.IncomingHandler;
+import com.example.shashankshekhar.smartcampuslib.Interfaces.ServiceCallback;
 import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
 
 import java.text.DecimalFormat;
 import java.util.Observable;
 import java.util.Observer;
 
-public class DynamicMoteGraph extends Activity {
+public class DynamicMoteGraph extends Activity implements ServiceCallback {
 
     // redraws a plot whenever an update is received:
     private class MyPlotUpdater implements Observer {
@@ -45,6 +49,7 @@ public class DynamicMoteGraph extends Activity {
     boolean resetTimeStamp = true;
     Integer initalTimeStamp;
     String plotTitle;
+    Messenger clientMessenger;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -94,6 +99,7 @@ public class DynamicMoteGraph extends Activity {
         if (topicName != null) {
             setupBroadcastReceiver();
         }
+        clientMessenger = new Messenger(new IncomingHandler(getApplicationContext(), this));
         setupDynamicPlot();
         // get handles to our View defined in layout.xml:
 
@@ -101,7 +107,7 @@ public class DynamicMoteGraph extends Activity {
     @Override
     public void onStart() {
         if(topicName != null) {
-            serviceAdapter.subscribeToTopic(topicName);
+            serviceAdapter.subscribeToTopic(topicName,clientMessenger);
         }
         super.onStart();
     }
@@ -123,7 +129,7 @@ public class DynamicMoteGraph extends Activity {
     }
     @Override
     public void onStop() {
-        serviceAdapter.unsubscribeFromTopic(topicName);
+        serviceAdapter.unsubscribeFromTopic(topicName,clientMessenger);
         try {
             unregisterReceiver(broadcastReceiver);
         } catch (IllegalArgumentException ex)
@@ -137,6 +143,23 @@ public class DynamicMoteGraph extends Activity {
         super.onDestroy();
         // kill the plotter thread
 //        data.stopPlotterThread();
+    }
+    @Override
+    public void messageReceivedFromService(int number) {
+        /*
+        this is the callback received
+         */
+        switch (number) {
+            case SUBSCRIPTION_SUCCESS:
+                break;
+            case SUBSCRIPTION_ERROR:
+                break;
+            case UNSUBSCRIPTION_SUCCESS:
+                break;
+            case UNSUBSCRIPTION_ERROR:
+                break;
+
+        }
     }
     public void setupBroadcastReceiver () {
         if (topicName == null) {

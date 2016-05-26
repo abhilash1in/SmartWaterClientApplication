@@ -1,5 +1,6 @@
 package com.example.shashankshekhar.smartcampuslib;
 
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.os.Messenger;
 import static com.example.shashankshekhar.smartcampuslib.SmartXLibConstants.*;
 
 import android.os.RemoteException;
+import android.view.View;
 
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 
@@ -129,6 +131,53 @@ public class ServiceAdapter {
             return false;
         }
         return true;
+    }
+    public void checkMqttConnection (Messenger messenger) {
+        if (messenger == null || bound == false ) {
+            CommonUtils.printLog("service not connected .. returning");
+//            CommonUtils.showToast(getApplicationContext(), "Service not running");
+            return;
+        }
+        Message message = Message.obtain(null,CHECK_MQTT_CONNECTION);
+        message.replyTo = messenger;
+        try {
+            messenger.send(message);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            CommonUtils.printLog("remote Exception,Could not send message");
+        }
+    }
+    /*
+    write down methods for connecting and disconnecting to mqtt
+     */
+
+    public void connectMqtt1(Messenger messenger) {
+        if (messenger == null || bound == false) {
+            CommonUtils.printLog("service not connected .. returning from service adapter");
+            return;
+        }
+        Message message = Message.obtain(null, CONNECT_MQTT);
+        message.replyTo = messenger;
+        try {
+            messenger.send(message);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            CommonUtils.printLog("remote Exception,Could not send message");
+        }
+    }
+    private void disconnectMqtt (Messenger messenger) {
+        if (messenger == null || bound == false) {
+            CommonUtils.printLog("service not connected .. returning from service adapter");
+            return;
+        }
+        Message message = Message.obtain(null, DISCONNECT_MQTT);
+        message.replyTo = messenger;
+        try {
+            messenger.send(message);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            CommonUtils.printLog("remote Exception,Could not send message");
+        }
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {

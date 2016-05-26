@@ -4,6 +4,7 @@ package com.example.shashankshekhar.application3s1;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Messenger;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,12 +14,15 @@ import static com.example.shashankshekhar.application3s1.CommonUtilities.SmartWa
 import com.example.shashankshekhar.application3s1.Graph.Dashboard;
 import com.example.shashankshekhar.application3s1.Map.MapActivity;
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
+import com.example.shashankshekhar.smartcampuslib.Interfaces.ServiceCallback;
 import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
+import com.example.shashankshekhar.smartcampuslib.IncomingHandler;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ServiceCallback {
 
     SharedPreferences sharedpreferences;
     ServiceAdapter serviceAdapter;
+    Messenger clientMessenger;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         updateSharedPreferences();
         serviceAdapter = new  ServiceAdapter(getApplicationContext());
         startService(new Intent(this, EventReceiverService.class));
+        clientMessenger = new Messenger(new IncomingHandler(getApplicationContext(), this));
     }
 
     public void bindService (View view) {
@@ -52,19 +57,36 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
     }
+    @Override
+    public void messageReceivedFromService(int number) {
+        /*
+        this is the callback received
+         */
+        switch (number) {
+            case SUBSCRIPTION_SUCCESS:
+                break;
+            case SUBSCRIPTION_ERROR:
+                break;
+            case UNSUBSCRIPTION_SUCCESS:
+                break;
+            case UNSUBSCRIPTION_ERROR:
+                break;
+
+        }
+    }
     public void subscribeToTopic (View view) {
         if (serviceAdapter.serviceConnected() == false) {
             CommonUtils.showToast(getApplicationContext(),"Service not connected");
             return;
         }
-        serviceAdapter.subscribeToTopic(WATER_EVENTS_TOPIC);
+        serviceAdapter.subscribeToTopic(WATER_EVENTS_TOPIC,clientMessenger);
     }
     public void unsubscribeToTopic (View view ) {
         if (serviceAdapter.serviceConnected() == false) {
             CommonUtils.showToast(getApplicationContext(),"Service not connected");
             return;
         }
-        serviceAdapter.unsubscribeFromTopic(WATER_EVENTS_TOPIC);
+        serviceAdapter.unsubscribeFromTopic(WATER_EVENTS_TOPIC,clientMessenger);
     }
 
     public void loadMap (View view) {

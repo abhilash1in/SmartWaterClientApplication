@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 
 
+import android.os.Messenger;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import com.example.shashankshekhar.application3s1.R;
 import static com.example.shashankshekhar.application3s1.CommonUtilities.SmartWaterConstants.*;
 
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
+import com.example.shashankshekhar.smartcampuslib.IncomingHandler;
+import com.example.shashankshekhar.smartcampuslib.Interfaces.ServiceCallback;
 import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -44,7 +47,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class MapActivity extends AppCompatActivity implements LocationListener, MapEventsReceiver {
+public class MapActivity extends AppCompatActivity implements LocationListener, MapEventsReceiver,ServiceCallback {
     MapView mapView;
     MapController myMapController;
     LocationManager locationManager;
@@ -52,6 +55,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
     String longitude = null;
     Location location;
     GeoPoint currentLocation;
+    Messenger clientMessenger;
     final int LOCATION_UPDATE_FREQ_FOREGROUND = 2 * 1000 * 60; // In milliseconds
     final int LOCATION_UPDATE_FREQ_BACKGROUND = 5 * 1000 * 60; // In milliseconds
     final int LOCATION_UPDATE_DIST = 50; // in meters
@@ -73,6 +77,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         Intent intent = getIntent();
         String lat = intent.getStringExtra("lat");
         String long1 = intent.getStringExtra("long");
+        clientMessenger = new Messenger(new IncomingHandler(getApplicationContext(), this));
         if (lat != null && long1 != null) {
             GeoPoint tappedLocation = new GeoPoint(Double.parseDouble(lat), Double.parseDouble(long1));
             addMarkerAtLocation(tappedLocation);
@@ -246,6 +251,24 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         return false;
     }
 
+    @Override
+    public void messageReceivedFromService(int number) {
+        /*
+        this is the callback received
+         */
+        switch (number) {
+            case SUBSCRIPTION_SUCCESS:
+                break;
+            case SUBSCRIPTION_ERROR:
+                break;
+            case UNSUBSCRIPTION_SUCCESS:
+                break;
+            case UNSUBSCRIPTION_ERROR:
+                break;
+
+        }
+    }
+
     public void addMarkerAtLocation(GeoPoint currentGeoPoint) {
         Marker marker = new Marker(mapView);
         marker.setPosition(currentGeoPoint);
@@ -272,7 +295,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
             } else {
                 dataString = latitude + "-" + longitude + "-" + description;
             }
-            serviceAdapter.publishGlobal(WATER_EVENTS_TOPIC, eventName, dataString);
+            serviceAdapter.publishGlobal(WATER_EVENTS_TOPIC, eventName, dataString,clientMessenger);
         }
     }
 }

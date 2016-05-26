@@ -15,6 +15,10 @@ public final class SmartXLibConstants {
     public static  final int PUBLISH_MESSAGE = 3;
     public static  final int SUBSCRIBE_TO_TOPIC = 4;
     public static  final int UNSUBSCRIBE_TO_TOPIC = 5;
+    public static  final int CHECK_SERVICE = 6;
+    public static  final int CHECK_MQTT_CONNECTION = 7;
+    public static  final int CONNECT_MQTT = 8;
+    public static  final int DISCONNECT_MQTT = 9;
 
 }
 /*

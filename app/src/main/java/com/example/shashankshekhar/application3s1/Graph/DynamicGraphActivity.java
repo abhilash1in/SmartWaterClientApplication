@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.os.Messenger;
 import android.support.annotation.IntegerRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ import com.androidplot.xy.XYSeries;
 import com.androidplot.xy.XYStepMode;
 import com.example.shashankshekhar.application3s1.R;
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
+import com.example.shashankshekhar.smartcampuslib.IncomingHandler;
+import com.example.shashankshekhar.smartcampuslib.Interfaces.ServiceCallback;
 import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
 
 import org.json.JSONException;
@@ -31,7 +34,7 @@ import java.text.DecimalFormat;
 import java.util.Observable;
 import java.util.Observer;
 
-public class DynamicGraphActivity extends AppCompatActivity  {
+public class DynamicGraphActivity extends AppCompatActivity implements ServiceCallback {
     private XYPlot dynamicPlot;
     private MyPlotUpdater plotUpdater;
     SampleDynamicXYDatasource data;
@@ -40,6 +43,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
     boolean resetTimeStamp = true;
     Integer initalTimeStamp;
     ServiceAdapter serviceAdapter;
+    Messenger clientMessenger;
     private class MyPlotUpdater implements Observer {
         Plot plot;
         public MyPlotUpdater(Plot plot) {
@@ -81,6 +85,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
         CommonUtils.printLog("onCreateCalled, DynamicGraphActivity");
         setupDynamicPlot();
         topicName = getIntent().getStringExtra("topicName");
+        clientMessenger = new Messenger(new IncomingHandler(getApplicationContext(), this));
         if (topicName != null) {
             setupBroadcastReceiver();
         }
@@ -88,7 +93,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
     @Override
     public void onStart() {
         if(topicName != null) {
-            serviceAdapter.subscribeToTopic(topicName);
+            serviceAdapter.subscribeToTopic(topicName,clientMessenger);
         }
         super.onStart();
     }
@@ -110,7 +115,7 @@ public class DynamicGraphActivity extends AppCompatActivity  {
     }
     @Override
     public void onStop() {
-        serviceAdapter.unsubscribeFromTopic(topicName);
+        serviceAdapter.unsubscribeFromTopic(topicName,clientMessenger);
         try {
             unregisterReceiver(broadcastReceiver);
         } catch (IllegalArgumentException ex)
@@ -125,7 +130,10 @@ public class DynamicGraphActivity extends AppCompatActivity  {
         // kill the plotter thread
 //        data.stopPlotterThread();
     }
+    @Override
+    public void messageReceivedFromService(int number) {
 
+    }
     private void setupDynamicPlot () {
         dynamicPlot = (XYPlot)findViewById(R.id.dynamicXYPlot);
         plotUpdater = new MyPlotUpdater(dynamicPlot);
