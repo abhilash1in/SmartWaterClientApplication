@@ -11,19 +11,6 @@ import com.example.shashankshekhar.smartcampuslib.Interfaces.ServiceCallback;
  * Created by shashankshekhar on 05/05/16.
  */
 public class IncomingHandler extends Handler {
-//    static final int MQTT_CONNECTED = 1;
-//    static final int UNABLE_TO_CONNECT = 2;
-//    static final int NO_NETWORK_AVAILABLE = 4;
-//    static final int MQTT_CONNECTION_IN_PROGRESS = 5;
-//    static final int MQTT_NOT_CONNECTED = 6;
-//
-//    // publish
-//    static final int TOPIC_PUBLISHED = 7;
-//    static final int ERROR_IN_PUBLISHING = 8;
-//
-//    // subscribing
-//    static final int TOPIC_SUBSCRIBED = 9;
-//    static final int ERROR_IN_SUBSCRIBING = 10;
 
     Context applicationContext;
     ServiceCallback callback;

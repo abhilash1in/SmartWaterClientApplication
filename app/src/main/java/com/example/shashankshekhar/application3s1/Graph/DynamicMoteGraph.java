@@ -19,12 +19,13 @@ import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 import com.example.shashankshekhar.smartcampuslib.IncomingHandler;
 import com.example.shashankshekhar.smartcampuslib.Interfaces.ServiceCallback;
 import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
+import com.example.shashankshekhar.smartcampuslib.SmartXLibConstants;
 
 import java.text.DecimalFormat;
 import java.util.Observable;
 import java.util.Observer;
 
-public class DynamicMoteGraph extends Activity implements ServiceCallback {
+public class DynamicMoteGraph extends Activity implements ServiceCallback,SmartXLibConstants {
 
     // redraws a plot whenever an update is received:
     private class MyPlotUpdater implements Observer {

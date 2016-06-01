@@ -5,14 +5,14 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
-import static com.example.shashankshekhar.smartcampuslib.SmartXLibConstants.*;
+import com.example.shashankshekhar.smartcampuslib.SmartXLibConstants;
 
 import java.util.List;
 
 /**
  * Created by shashankshekhar on 03/11/15.
  */
-public class LocationHelper  {
+public class LocationHelper implements SmartXLibConstants {
     LocationManager mLocationManager;
     private Context applicationCntxt;
 //    Location myLocation = getLastKnownLocation();

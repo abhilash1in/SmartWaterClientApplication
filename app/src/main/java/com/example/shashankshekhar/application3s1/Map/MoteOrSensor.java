@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.example.shashankshekhar.application3s1.R;
 
+// TODO: 29/05/16 bad class name. does not say anything about what it does. change it
 public class MoteOrSensor extends AppCompatActivity {
     WaterSensors waterSensor;
     Motes mote;

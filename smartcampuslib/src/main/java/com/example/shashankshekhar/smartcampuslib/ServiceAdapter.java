@@ -10,67 +10,63 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 
-import static com.example.shashankshekhar.smartcampuslib.SmartXLibConstants.*;
-
 import android.os.RemoteException;
 import android.view.View;
 
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 
-public class ServiceAdapter {
-    // static vars. not object dependents
-    static Messenger messenger = null;
-    static boolean bound = false;
+public class ServiceAdapter implements SmartXLibConstants {
 
     Context callerContext = null;
     // TODO: 14/02/16  initialise it separately and send a call to BGS to update its storage
+    /*
+    each application that uses BG service will have its own id.
+     */
     String applicationId = null;
 
     public ServiceAdapter(Context context) {
         callerContext = context;
     }
 
-    public void bindToService() {
+    public void startAndBindToService(SCServiceConnector connector) {
         if (serviceConnected() == true) {
             CommonUtils.showToast(callerContext, "Service already connected");
             return;
         }
-        ComponentName componentName = new ComponentName("com.example.shashankshekhar.servicedemo",
-                "com.example.shashankshekhar.servicedemo.FirstService");
+        ComponentName componentName = new ComponentName(SERVICE_PACKAGE_NAME,
+                SERVICE_CLASS_NAME);
         Intent intent = new Intent();
         intent.setComponent(componentName);
-        Boolean isConnected = callerContext.bindService(intent, serviceConnection, Context.BIND_IMPORTANT);
+        callerContext.startService(intent);
+        Boolean isConnected = callerContext.bindService(intent, connector, Context.BIND_IMPORTANT);
     }
 
-    public void unbindFromService() {
+    public void unbindFromService(SCServiceConnector connector) {
         if (serviceConnected() == false) {
             CommonUtils.showToast(callerContext, "Already Disconnected");
         }
-        callerContext.unbindService(serviceConnection);
-        bound = false;
-        messenger = null;
+        callerContext.unbindService(connector);
+
     }
 
     public Boolean serviceConnected() {
-        if (messenger == null || bound == false) {
-            return false;
-        }
-        return true;
+        return SCServiceConnector.isServiceConnected();
     }
 
-    public void publishGlobal(String topicName, String eventName, String dataString,Messenger messenger) {
+    public void publishGlobal(String topicName, String eventName, String dataString,Messenger replyMessenger) {
         if (checkConnectivity() == false) {
             return;
         }
         Message messageToPublish = Message.obtain(null, PUBLISH_MESSAGE);
         Bundle bundleToPublish = new Bundle();
+        // TODO: 31/05/16 move these strings as constants
         bundleToPublish.putString("topicName", topicName);
         bundleToPublish.putString("eventName", eventName);
         bundleToPublish.putString("dataString", dataString);
         messageToPublish.setData(bundleToPublish);
-        messageToPublish.replyTo = messenger;
+        messageToPublish.replyTo = replyMessenger;
         try {
-            messenger.send(messageToPublish);
+            SCServiceConnector.getMessenger().send(messageToPublish);
         } catch (RemoteException e) {
             e.printStackTrace();
             CommonUtils.printLog("remote Exception,Could not send message");
@@ -78,7 +74,7 @@ public class ServiceAdapter {
 
     }
 
-    public String subscribeToTopic(String topicName,Messenger messenger) {
+    public String subscribeToTopic(String topicName,Messenger replyMessenger) {
         // TODO: 12/11/15 this should return a subscribe id to the caller hence the String return type
         if (checkConnectivity() == false) {
             return null;
@@ -88,9 +84,9 @@ public class ServiceAdapter {
         Bundle bundle = new Bundle();
         bundle.putString("topicName", topicName);
         messageToSubscribe.setData(bundle);
-        messageToSubscribe.replyTo = messenger;
+        messageToSubscribe.replyTo = replyMessenger;
         try {
-            messenger.send(messageToSubscribe);
+            SCServiceConnector.getMessenger().send(messageToSubscribe);
         } catch (RemoteException e) {
             e.printStackTrace();
             CommonUtils.printLog("exception while trying to subscribe");
@@ -98,7 +94,7 @@ public class ServiceAdapter {
         return null;
     }
 
-    public void unsubscribeFromTopic(String topicName,Messenger messenger) {
+    public void unsubscribeFromTopic(String topicName,Messenger replyMessenger) {
         if (checkConnectivity() == false) {
             return;
         }
@@ -106,9 +102,9 @@ public class ServiceAdapter {
         Bundle bundle = new Bundle();
         bundle.putString("topicName", topicName);
         unsubscribe.setData(bundle);
-        unsubscribe.replyTo = messenger;
+        unsubscribe.replyTo = replyMessenger;
         try {
-            messenger.send(unsubscribe);
+            SCServiceConnector.getMessenger().send(unsubscribe);
         } catch (RemoteException e) {
             e.printStackTrace();
             CommonUtils.printLog("exception while sending message for unsubscribe");
@@ -123,25 +119,18 @@ public class ServiceAdapter {
             }
             return false;
         }
-        if (CommonUtils.isNetworkAvailable(callerContext) == false) {
-            CommonUtils.printLog("network not available..returning");
-            if (callerContext != null) {
-                CommonUtils.showToast(callerContext, "No Network");
-            }
-            return false;
-        }
         return true;
     }
-    public void checkMqttConnection (Messenger messenger) {
-        if (messenger == null || bound == false ) {
+    public void checkMqttConnection (Messenger replyMessenger) {
+        if (!serviceConnected()) {
             CommonUtils.printLog("service not connected .. returning");
 //            CommonUtils.showToast(getApplicationContext(), "Service not running");
             return;
         }
         Message message = Message.obtain(null,CHECK_MQTT_CONNECTION);
-        message.replyTo = messenger;
+        message.replyTo = replyMessenger;
         try {
-            messenger.send(message);
+            SCServiceConnector.getMessenger().send(message);
         } catch (RemoteException e) {
             e.printStackTrace();
             CommonUtils.printLog("remote Exception,Could not send message");
@@ -151,51 +140,33 @@ public class ServiceAdapter {
     write down methods for connecting and disconnecting to mqtt
      */
 
-    public void connectMqtt1(Messenger messenger) {
-        if (messenger == null || bound == false) {
+    public void connectMqtt(Messenger replyMessenger) {
+        if (!serviceConnected()) {
             CommonUtils.printLog("service not connected .. returning from service adapter");
             return;
         }
         Message message = Message.obtain(null, CONNECT_MQTT);
-        message.replyTo = messenger;
+        message.replyTo = replyMessenger;
         try {
-            messenger.send(message);
+            SCServiceConnector.getMessenger().send(message);
         } catch (RemoteException e) {
             e.printStackTrace();
             CommonUtils.printLog("remote Exception,Could not send message");
         }
     }
-    private void disconnectMqtt (Messenger messenger) {
-        if (messenger == null || bound == false) {
+    public void disconnectMqtt (Messenger replyMessenger) {
+        if (!serviceConnected()) {
             CommonUtils.printLog("service not connected .. returning from service adapter");
             return;
         }
         Message message = Message.obtain(null, DISCONNECT_MQTT);
-        message.replyTo = messenger;
+        message.replyTo = replyMessenger;
         try {
-            messenger.send(message);
+            SCServiceConnector.getMessenger().send(message);
         } catch (RemoteException e) {
             e.printStackTrace();
             CommonUtils.printLog("remote Exception,Could not send message");
         }
     }
-
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            messenger = new Messenger(service);
-            bound = true;
-            CommonUtils.printLog("both flag are set");
-            CommonUtils.showToast(callerContext, "Connected to Service");
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            bound = false;
-            messenger = null;
-            CommonUtils.printLog("service disconnected from water app");
-            CommonUtils.showToast(callerContext, "Service Disconnected");
-        }
-    };
 }
 

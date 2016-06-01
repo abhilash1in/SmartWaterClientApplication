@@ -24,6 +24,7 @@ import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 import com.example.shashankshekhar.smartcampuslib.IncomingHandler;
 import com.example.shashankshekhar.smartcampuslib.Interfaces.ServiceCallback;
 import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
+import com.example.shashankshekhar.smartcampuslib.SmartXLibConstants;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -47,7 +48,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class MapActivity extends AppCompatActivity implements LocationListener, MapEventsReceiver,ServiceCallback {
+public class MapActivity extends AppCompatActivity implements LocationListener, MapEventsReceiver,ServiceCallback, SmartXLibConstants {
     MapView mapView;
     MapController myMapController;
     LocationManager locationManager;

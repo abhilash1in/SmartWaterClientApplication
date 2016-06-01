@@ -15,14 +15,18 @@ import com.example.shashankshekhar.application3s1.Graph.Dashboard;
 import com.example.shashankshekhar.application3s1.Map.MapActivity;
 import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 import com.example.shashankshekhar.smartcampuslib.Interfaces.ServiceCallback;
+import com.example.shashankshekhar.smartcampuslib.Interfaces.ServiceStatusCallback;
+import com.example.shashankshekhar.smartcampuslib.SCServiceConnector;
 import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
 import com.example.shashankshekhar.smartcampuslib.IncomingHandler;
+import com.example.shashankshekhar.smartcampuslib.SmartXLibConstants;
 
-public class MainActivity extends AppCompatActivity implements ServiceCallback {
+public class MainActivity extends AppCompatActivity implements ServiceCallback,SmartXLibConstants,ServiceStatusCallback {
 
     SharedPreferences sharedpreferences;
     ServiceAdapter serviceAdapter;
     Messenger clientMessenger;
+    SCServiceConnector connector;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,13 +35,14 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback {
         // TODO: 02/02/16 generate the app id here and put in a persistent storage
         updateSharedPreferences();
         serviceAdapter = new  ServiceAdapter(getApplicationContext());
+        connector = new SCServiceConnector(this);
         startService(new Intent(this, EventReceiverService.class));
         clientMessenger = new Messenger(new IncomingHandler(getApplicationContext(), this));
     }
 
     public void bindService (View view) {
         if (serviceAdapter.serviceConnected() == false) {
-            serviceAdapter.bindToService();
+            serviceAdapter.startAndBindToService(connector);
             return;
         }
         CommonUtils.showToast(this,"Service connected");
@@ -46,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback {
 
     public void unbindService (View view) {
         if (serviceAdapter.serviceConnected()== true) {
-            serviceAdapter.unbindFromService();
+            serviceAdapter.unbindFromService(connector);
             return;
         }
         CommonUtils.showToast(this,"Service not connected");
@@ -73,6 +78,14 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback {
                 break;
 
         }
+    }
+    @Override
+    public void serviceConnected () {
+        CommonUtils.printLog("service connected in main activity - water app");
+    }
+    @Override
+    public void serviceDisconnected () {
+        CommonUtils.printLog("service DISconnected in main activity - water app");
     }
     public void subscribeToTopic (View view) {
         if (serviceAdapter.serviceConnected() == false) {

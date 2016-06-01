@@ -25,6 +25,7 @@ import com.example.shashankshekhar.smartcampuslib.HelperClass.CommonUtils;
 import com.example.shashankshekhar.smartcampuslib.IncomingHandler;
 import com.example.shashankshekhar.smartcampuslib.Interfaces.ServiceCallback;
 import com.example.shashankshekhar.smartcampuslib.ServiceAdapter;
+import com.example.shashankshekhar.smartcampuslib.SmartXLibConstants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +35,7 @@ import java.text.DecimalFormat;
 import java.util.Observable;
 import java.util.Observer;
 
-public class DynamicGraphActivity extends AppCompatActivity implements ServiceCallback {
+public class DynamicGraphActivity extends AppCompatActivity implements ServiceCallback,SmartXLibConstants {
     private XYPlot dynamicPlot;
     private MyPlotUpdater plotUpdater;
     SampleDynamicXYDatasource data;
