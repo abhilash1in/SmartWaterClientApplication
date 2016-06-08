@@ -12,6 +12,7 @@ import android.support.annotation.IntegerRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
+import android.widget.Switch;
 
 import com.androidplot.Plot;
 import com.androidplot.util.PixelUtils;
@@ -133,6 +134,22 @@ public class DynamicGraphActivity extends AppCompatActivity implements ServiceCa
     }
     @Override
     public void messageReceivedFromService(int number) {
+        String toastStr = "unknown switch case";
+        switch (number){
+            case SUBSCRIPTION_SUCCESS:
+                toastStr = "subscription success";
+                break;
+            case SUBSCRIPTION_ERROR:
+                toastStr = "subscription error";
+                break;
+            case UNSUBSCRIPTION_SUCCESS:
+                toastStr = "unsubscribed";
+                break;
+            case UNSUBSCRIPTION_ERROR:
+                toastStr = "unsubscription error";
+                break;
+        }
+        CommonUtils.showToast(getApplicationContext(),toastStr);
 
     }
     private void setupDynamicPlot () {

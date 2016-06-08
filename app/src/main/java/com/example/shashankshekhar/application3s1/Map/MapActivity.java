@@ -257,17 +257,29 @@ public class MapActivity extends AppCompatActivity implements LocationListener, 
         /*
         this is the callback received
          */
+        String msg = "unknown switch case";
         switch (number) {
             case SUBSCRIPTION_SUCCESS:
+                msg = "subscribed successfully";
                 break;
             case SUBSCRIPTION_ERROR:
+                msg = "error in subscribing";
                 break;
             case UNSUBSCRIPTION_SUCCESS:
+                msg = "unsubscription success";
                 break;
             case UNSUBSCRIPTION_ERROR:
+                msg = "unsubscription error";
+                break;
+            case TOPIC_PUBLISHED:
+                msg = "published";
+                break;
+            case  ERROR_IN_PUBLISHING:
+                msg = "error in publishing";
                 break;
 
         }
+        CommonUtils.showToast(getApplicationContext(),msg);
     }
 
     public void addMarkerAtLocation(GeoPoint currentGeoPoint) {
